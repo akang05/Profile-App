@@ -5,46 +5,43 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.section-container {
+  border: 3px solid #ceb888; /* Purdue Gold Border */
+  padding: 40px;
+  margin: 20px auto;
+  border-radius: 20px;
+  background-color: #1a1a1a; /* Dark background to match your screenshot */
+  max-width: 1000px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.section-title {
+  color: #ceb888;
+  margin-bottom: 30px;
+  font-size: 2rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Layout for the cards area */
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
-.card {
-  padding: 2em;
+/* Base style for individual cards */
+.card-standard, .card-featured {
+  border: 1px solid #444;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #242424;
+  color: #ffffff;
+  min-width: 280px;
+  text-align: left; /* Makes the text inside look organized */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.read-the-docs {
-  color: #080808;
-}
-
-.card-active, .card-enrolled {
-  border: 2px solid #000;
-  padding: 20px;
-  margin: 10px;
-  border-radius: 10px;
-  background-color: #526308;
+/* Highlighting the Featured Card (Requirement: Pass isFeatured prop) */
+.card-featured {
+  border: 2px solid #ceb888;
+  box-shadow: 0 0 15px rgba(206, 184, 136, 0.2);
 }
