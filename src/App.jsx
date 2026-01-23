@@ -6,7 +6,7 @@ import Section from './components/Section';
 import './App.css';
 
 function App() {
-  // Requirement: Array of card data (at least 2)
+  // Array of card data (at least 2)
   const profiles = [
     {
       id: 1,
@@ -31,10 +31,10 @@ function App() {
       <Header />
       <Introduction />
 
-      {/* Requirement: Use the Section wrapper component */}
+      {/* Section wrapper component */}
       <Section title="My Profiles">
         <div className="card-wrapper">
-          {/* Requirement: Render cards using .map() */}
+          {/* Render cards using .map() */}
           {profiles.map((profile) => (
             <Card 
               key={profile.id} 

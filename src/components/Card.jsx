@@ -1,9 +1,9 @@
 // src/components/Card.jsx
 function Card(props) {
-  // We extract the data sent from App.jsx
+  // Extract the data sent from App.jsx
   const { title, email, university, extraInfo, isFeatured } = props;
 
-  // Requirement: dynamic className based on the isFeatured prop
+  // className based on the isFeatured prop
   const statusClass = isFeatured ? "card-featured" : "card-standard";
 
   return (
