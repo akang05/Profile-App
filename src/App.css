@@ -45,3 +45,50 @@
   border: 2px solid #ceb888;
   box-shadow: 0 0 15px rgba(206, 184, 136, 0.2);
 }
+
+/* Styling for Lab 5 Interactive Controls */
+.controls-wrapper {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.search-input, .filter-dropdown {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #242424;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus, .filter-dropdown:focus {
+  border-color: #ceb888; /* Glow gold when typing */
+}
+
+.reset-button {
+  background-color: #ceb888; /* Purdue Gold */
+  color: #000000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reset-button:hover {
+  background-color: #e2d1a8; /* Lighter gold on hover */
+}
+
+/* Message shown when no results are found */
+.no-results {
+  color: #ceb888;
+  font-style: italic;
+  margin-top: 20px;
+}
