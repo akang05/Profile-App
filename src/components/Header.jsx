@@ -1,8 +1,7 @@
 function Header() {
-  const name = "Alvin Kang"; 
   return (
     <header className="header-style">
-      <h1>{name}'s Profile</h1>
+      <h1 style={{color: '#ceb888'}}>Keep Lite</h1>
     </header>
   );
 }

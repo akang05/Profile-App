@@ -1,2 +1,18 @@
-I am planning to build a Notes application and website that allows users to create, organize, and delete short text entries in real-time. I chose to build this because it provides a practical way to master React's State management and 'lifting state' between components. This project focuses on building a functional user interface that handles dynamic data input and provides immediate visual feedback. I want to be able to also use this project as a base for frontent programming to further expand my knowledge in functionality and being able to apply this coding to future projects.
+# Keep Lite - Google Keep Rebuild
 
+## Original Application
+[Google Keep](https://keep.google.com/)
+
+## Project Overview
+A lightweight productivity app built with React that mimics the layout and filtering capabilities of Google Keep.
+
+## How to Run Locally
+1. Clone the repo.
+2. Run `npm install` in your terminal.
+3. Run `npm run dev` to view the project.
+
+## Planned Components
+- `Header`: App branding.
+- `NoteCard`: Note display with Pinned/Unpinned logic.
+- `Section`: Reusable layout wrapper.
+- `Controls`: Search and Category filtering bar.

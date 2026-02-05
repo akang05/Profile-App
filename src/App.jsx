@@ -1,93 +1,120 @@
-import { useState } from 'react'; // MUST ADD THIS
+import { useState } from 'react';
 import Header from './components/Header';
-import Introduction from './components/Introduction';
-import Card from './components/Card';
+import NoteCard from './components/NoteCard';
 import Section from './components/Section';
+import AddProfileForm from './components/AddProfileForm'; 
 import './App.css';
 
 function App() {
-  // 1. Setup State for inputs
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTitle, setSelectedTitle] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
-  const profiles = [
+  // 1. Initial Data in State (so it can be updated)
+  const [notes, setNotes] = useState([
     {
       id: 1,
-      title: "Academic Profile",
-      email: "kang540@purdue.brightspace.com",
-      university: "Purdue University",
-      extraInfo: "Fact: Octopuses have three hearts and blue blood.",
-      isFeatured: true
+      title: "Checkpoint 1 Task",
+      text: "Submit the PDF proposal and the GitHub link by the deadline.",
+      category: "School",
+      isPinned: true
     },
     {
       id: 2,
-      title: "Personal Profile",
-      email: "alvinkang758@gmail.com",
-      university: "Purdue University",
-      extraInfo: "Hobby: I enjoy music and playing games.",
-      isFeatured: false
+      title: "Grocery List",
+      text: "Milk, eggs, coffee, and Purdue gold-colored pens.",
+      category: "Personal",
+      isPinned: false
+    },
+    {
+      id: 3,
+      title: "React Concept",
+      text: "Lifting state up means moving state to the closest common ancestor.",
+      category: "School",
+      isPinned: false
     }
-  ];
+  ]);
 
-  // 2. Filter Logic: This happens every time a user types or clicks
-  const filteredProfiles = profiles.filter((profile) => {
-    const matchesSearch = profile.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDropdown = selectedTitle === "" || profile.title === selectedTitle;
-    return matchesSearch && matchesDropdown;
+  // 2. Function to handle the form submission from AddProfileForm
+  const handleAddNote = (newProfile) => {
+    const newNote = {
+      id: Date.now(),
+      title: newProfile.name, // Using Name field as Title
+      text: `${newProfile.title}: ${newProfile.bio}`, // Using Title/Bio fields as Text
+      category: "Personal", // Default category for new entries
+      isPinned: false
+    };
+    setNotes([newNote, ...notes]); // Adds new note to the top of the list
+  };
+
+  // 3. Logic to handle search and category filtering
+  const filteredNotes = notes.filter((note) => {
+    const matchesSearch = note.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          note.text.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "" || note.category === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
 
-  // 3. Reset Function
   const handleReset = () => {
     setSearchTerm("");
-    setSelectedTitle("");
+    setSelectedCategory("");
   };
 
   return (
-    <div className="App">
+    <div className={isDarkMode ? "app-wrapper dark-mode" : "app-wrapper light-mode"}>
       <Header />
-      <Introduction />
+      
+      {/* Lab 7 Form Section */}
+      <Section title="Add New Note/Profile">
+         <AddProfileForm onAdd={handleAddNote} />
+      </Section>
 
-      {/* NEW SECTION FOR LAB 5 CONTROLS */}
-      <Section title="Search & Filter">
+      <Section title="Settings & Search">
         <div className="controls-wrapper">
+          <button onClick={() => setIsDarkMode(!isDarkMode)} className="reset-button">
+            {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+          </button>
+
           <input 
             type="text" 
-            placeholder="Search by name/title..." 
+            placeholder="Search your notes..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
 
           <select 
-            value={selectedTitle} 
-            onChange={(e) => setSelectedTitle(e.target.value)}
+            value={selectedCategory} 
+            onChange={(e) => setSelectedCategory(e.target.value)}
             className="filter-dropdown"
           >
-            <option value="">All Profiles</option>
-            <option value="Academic Profile">Academic Profile</option>
-            <option value="Personal Profile">Personal Profile</option>
+            <option value="">All Categories</option>
+            <option value="School">School</option>
+            <option value="Personal">Personal</option>
           </select>
 
           <button onClick={handleReset} className="reset-button">Reset</button>
         </div>
       </Section>
 
-      <Section title="My Profiles">
+      {/* Pinned Section */}
+      <Section title="Pinned Notes">
         <div className="card-wrapper">
-          {/* 4. Map through FILTERED profiles instead of the original array */}
-          {filteredProfiles.length > 0 ? (
-            filteredProfiles.map((profile) => (
-              <Card 
-                key={profile.id} 
-                title={profile.title}
-                email={profile.email}
-                university={profile.university}
-                extraInfo={profile.extraInfo}
-                isFeatured={profile.isFeatured}
-              />
+          {filteredNotes.filter(n => n.isPinned).map(note => (
+            <NoteCard key={note.id} {...note} isDarkMode={isDarkMode} />
+          ))}
+        </div>
+      </Section>
+
+      {/* Others Section */}
+      <Section title="Others">
+        <div className="card-wrapper">
+          {filteredNotes.filter(n => !n.isPinned).length > 0 ? (
+            filteredNotes.filter(n => !n.isPinned).map(note => (
+              <NoteCard key={note.id} {...note} isDarkMode={isDarkMode} />
             ))
           ) : (
-            <p style={{color: "white"}}>No profiles match your search.</p>
+            <p className="no-results">No notes found.</p>
           )}
         </div>
       </Section>
