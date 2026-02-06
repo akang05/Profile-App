@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // Added useEffect
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
@@ -11,9 +11,9 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   // --- Lab 8 State Variables ---
-  const [apiProfiles, setApiProfiles] = useState([]);      // Data from fetch-data.php
-  const [apiTitles, setApiTitles] = useState([]);          // Data from get-titles.php
-  const [selectedApiTitle, setSelectedApiTitle] = useState(""); // Title filter state
+  const [apiProfiles, setApiProfiles] = useState([]);      
+  const [apiTitles, setApiTitles] = useState([]);          
+  const [selectedApiTitle, setSelectedApiTitle] = useState(""); 
 
   // 1. Initial Data for local notes (Lab 7)
   const [notes, setNotes] = useState([
@@ -35,25 +35,30 @@ function App() {
 
   // --- Lab 8: Fetch Logic ---
 
-  // A. Fetch titles for the dropdown once on load
   useEffect(() => {
     fetch('https://web.ics.purdue.edu/~zong6/profile-app/get-titles.php')
-      .then(res => res.json())
-      .then(data => setApiTitles(data))
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        if (Array.isArray(data)) setApiTitles(data);
+      })
       .catch(err => console.error("Error fetching titles:", err));
   }, []);
 
-  // B. Fetch profiles based on Title Filter AND Search Term
   useEffect(() => {
-    const url = `https://web.ics.purdue.edu/~zong6/profile-app/fetch-data-with-filter.php?title=${selectedApiTitle}&name=${searchTerm}`;
+    // Only fetch if state is healthy
+    const url = `https://web.ics.purdue.edu/~zong6/profile-app/fetch-data-with-filter.php?title=${encodeURIComponent(selectedApiTitle)}&name=${encodeURIComponent(searchTerm)}`;
     
     fetch(url)
-      .then(res => res.json())
-      .then(data => setApiProfiles(data))
-      .catch(err => console.error("Error fetching API data:", err));
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        setApiProfiles(Array.isArray(data) ? data : []);
+      })
+      .catch(err => {
+        console.error("Error fetching API data:", err);
+        setApiProfiles([]); 
+      });
   }, [selectedApiTitle, searchTerm]); 
 
-  // Function to handle the local form submission (Lab 7)
   const handleAddNote = (newProfile) => {
     const newNote = {
       id: Date.now(),
@@ -65,7 +70,6 @@ function App() {
     setNotes([newNote, ...notes]);
   };
 
-  // Logic to handle local filtering
   const filteredNotes = notes.filter((note) => {
     const matchesSearch = note.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           note.text.toLowerCase().includes(searchTerm.toLowerCase());
@@ -76,7 +80,7 @@ function App() {
   const handleReset = () => {
     setSearchTerm("");
     setSelectedCategory("");
-    setSelectedApiTitle(""); // Reset API filter too
+    setSelectedApiTitle(""); 
   };
 
   return (
@@ -101,7 +105,6 @@ function App() {
             className="search-input"
           />
 
-          {/* Local Category Filter */}
           <select 
             value={selectedCategory} 
             onChange={(e) => setSelectedCategory(e.target.value)}
@@ -112,7 +115,6 @@ function App() {
             <option value="Personal">Personal</option>
           </select>
 
-          {/* Lab 8: API Title Filter */}
           <select 
             value={selectedApiTitle} 
             onChange={(e) => setSelectedApiTitle(e.target.value)}
@@ -120,7 +122,7 @@ function App() {
           >
             <option value="">All API Titles</option>
             {apiTitles.map((title, index) => (
-              <option key={index} value={title}>{title}</option>
+              <option key={`title-${index}`} value={title}>{title}</option>
             ))}
           </select>
 
@@ -128,30 +130,29 @@ function App() {
         </div>
       </Section>
 
-      {/* Lab 8: Fetched Data Section */}
       <Section title="Fetched Profiles (API)">
         <div className="card-wrapper">
           {apiProfiles.length > 0 ? (
-            apiProfiles.map((profile) => (
+            apiProfiles.map((profile, index) => (
               <NoteCard 
-                key={profile.id} 
-                title={profile.name} 
-                text={`${profile.title}: ${profile.bio}`} 
+                // FIXED KEY: Combines ID and Index for guaranteed uniqueness and stability
+                key={profile.id ? `api-${profile.id}` : `api-idx-${index}`} 
+                title={profile.name || "Unknown Name"} 
+                text={`${profile.title || "No Title"}: ${profile.bio || "No Bio available"}`} 
                 category="Fetched"
                 isDarkMode={isDarkMode} 
               />
             ))
           ) : (
-            <p className="no-results">No profiles match your search/filter.</p>
+            <p className="no-results">No profiles found in the database.</p>
           )}
         </div>
       </Section>
 
-      {/* Local Notes Sections */}
       <Section title="Pinned Notes">
         <div className="card-wrapper">
           {filteredNotes.filter(n => n.isPinned).map(note => (
-            <NoteCard key={note.id} {...note} isDarkMode={isDarkMode} />
+            <NoteCard key={`note-${note.id}`} {...note} isDarkMode={isDarkMode} />
           ))}
         </div>
       </Section>
@@ -159,7 +160,7 @@ function App() {
       <Section title="Others">
         <div className="card-wrapper">
           {filteredNotes.filter(n => !n.isPinned).map(note => (
-            <NoteCard key={note.id} {...note} isDarkMode={isDarkMode} />
+            <NoteCard key={`note-${note.id}`} {...note} isDarkMode={isDarkMode} />
           ))}
         </div>
       </Section>
