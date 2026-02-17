@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-// Added useParams, useNavigate, and Outlet for Lab 10
 import { HashRouter as Router, Routes, Route, useParams, useNavigate, Outlet } from 'react-router-dom';
+import { useTheme } from './context/ThemeContext'; // NEW: Import the hook
 import Header from './components/Header';
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
@@ -8,9 +8,8 @@ import AddProfileForm from './components/AddProfileForm';
 import Introduction from './components/Introduction';
 import './App.css';
 
-// --- NEW: Profile Detail Component (Fetches specific user by ID) ---
 const ProfileDetail = () => {
-  const { id } = useParams(); // Grabs the ID from the URL
+  const { id } = useParams();
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -33,7 +32,6 @@ const ProfileDetail = () => {
   );
 };
 
-// --- NEW: Layout Component (Handles Nested Route & "Go Back" button) ---
 const ProfileLayout = () => {
   const navigate = useNavigate();
   return (
@@ -41,19 +39,20 @@ const ProfileLayout = () => {
       <button onClick={() => navigate(-1)} className="reset-button" style={{ marginBottom: '20px' }}>
         ← Go Back
       </button>
-      <Outlet /> {/* This is where either the list OR the detail page renders */}
+      <Outlet />
     </Section>
   );
 };
 
-// --- Page Components ---
-const Home = ({ notes, isDarkMode }) => (
+// REMOVED: isDarkMode prop from Home
+const Home = ({ notes }) => (
   <>
     <Section title="Welcome"><Introduction /></Section>
     <Section title="Pinned Notes">
       <div className="card-wrapper">
         {notes.filter(n => n.isPinned).map(note => (
-          <NoteCard key={`note-${note.id}`} {...note} isDarkMode={isDarkMode} />
+          // REMOVED: isDarkMode prop from NoteCard
+          <NoteCard key={`note-${note.id}`} {...note} />
         ))}
       </div>
     </Section>
@@ -63,8 +62,8 @@ const Home = ({ notes, isDarkMode }) => (
 const NotFound = () => <Section title="404">Oops! Page not found.</Section>;
 
 function App() {
+  const { isDarkMode, toggleTheme } = useTheme(); // NEW: Consume global theme
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [apiProfiles, setApiProfiles] = useState([]);      
   const [apiTitles, setApiTitles] = useState([]);          
   const [selectedApiTitle, setSelectedApiTitle] = useState(""); 
@@ -92,19 +91,19 @@ function App() {
       <div className={isDarkMode ? "app-wrapper dark-mode" : "app-wrapper light-mode"}>
         <Header />
         <div style={{ textAlign: 'center', margin: '15px' }}>
-          <button onClick={() => setIsDarkMode(!isDarkMode)} className="reset-button">
+          {/* UPDATED: toggleTheme comes from context */}
+          <button onClick={toggleTheme} className="reset-button">
             {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
           </button>
         </div>
 
         <Routes>
-          <Route path="/" element={<Home notes={notes} isDarkMode={isDarkMode} />} />
+          {/* REMOVED: isDarkMode prop */}
+          <Route path="/" element={<Home notes={notes} />} />
           <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
           <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
           
-          {/* NESTED ROUTES: Profiles */}
           <Route path="/profiles" element={<ProfileLayout />}>
-             {/* The index route (list) */}
              <Route index element={
                <>
                 <div className="controls-wrapper" style={{marginBottom: '30px'}}>
@@ -116,12 +115,12 @@ function App() {
                 </div>
                 <div className="card-wrapper">
                   {apiProfiles.map((p) => (
-                    <NoteCard key={p.id} id={p.id} title={p.name} text={p.title} category="API" isDarkMode={isDarkMode} isApi={true} />
+                    // REMOVED: isDarkMode prop
+                    <NoteCard key={p.id} id={p.id} title={p.name} text={p.title} category="API" isApi={true} />
                   ))}
                 </div>
                </>
              } />
-             {/* Dynamic detail route */}
              <Route path=":id" element={<ProfileDetail />} />
           </Route>
 
