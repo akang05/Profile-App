@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useParams, useNavigate, Outlet } from 'react-router-dom';
-import { useTheme } from './context/ThemeContext'; // NEW: Import the hook
+import { useTheme } from './context/ThemeContext'; 
 import Header from './components/Header';
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
@@ -44,14 +44,12 @@ const ProfileLayout = () => {
   );
 };
 
-// REMOVED: isDarkMode prop from Home
 const Home = ({ notes }) => (
   <>
     <Section title="Welcome"><Introduction /></Section>
     <Section title="Pinned Notes">
       <div className="card-wrapper">
         {notes.filter(n => n.isPinned).map(note => (
-          // REMOVED: isDarkMode prop from NoteCard
           <NoteCard key={`note-${note.id}`} {...note} />
         ))}
       </div>
@@ -62,13 +60,20 @@ const Home = ({ notes }) => (
 const NotFound = () => <Section title="404">Oops! Page not found.</Section>;
 
 function App() {
-  const { isDarkMode, toggleTheme } = useTheme(); // NEW: Consume global theme
+  const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useState("");
   const [apiProfiles, setApiProfiles] = useState([]);      
   const [apiTitles, setApiTitles] = useState([]);          
   const [selectedApiTitle, setSelectedApiTitle] = useState(""); 
   const [notes, setNotes] = useState([
-    { id: 1, title: "Checkpoint 1 Task", text: "Submit the PDF proposal.", category: "School", isPinned: true }
+    { 
+      id: 1, 
+      title: "Checkpoint 1 Task", 
+      text: "Submit the PDF proposal.", 
+      category: "School", 
+      isPinned: true,
+      imageUrl: "https://via.placeholder.com/150" // Example image
+    }
   ]);
 
   useEffect(() => {
@@ -82,7 +87,14 @@ function App() {
   }, [selectedApiTitle, searchTerm]);
 
   const handleAddNote = (newP) => {
-    const newNote = { id: Date.now(), title: newP.name, text: newP.bio, category: "Personal", isPinned: false };
+    const newNote = { 
+      id: Date.now(), 
+      title: newP.name, 
+      text: newP.bio, 
+      imageUrl: newP.imageUrl, // FIXED: Correctly saving the image URL
+      category: "Personal", 
+      isPinned: false 
+    };
     setNotes([newNote, ...notes]);
   };
 
@@ -91,14 +103,12 @@ function App() {
       <div className={isDarkMode ? "app-wrapper dark-mode" : "app-wrapper light-mode"}>
         <Header />
         <div style={{ textAlign: 'center', margin: '15px' }}>
-          {/* UPDATED: toggleTheme comes from context */}
           <button onClick={toggleTheme} className="reset-button">
             {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
           </button>
         </div>
 
         <Routes>
-          {/* REMOVED: isDarkMode prop */}
           <Route path="/" element={<Home notes={notes} />} />
           <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
           <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
@@ -115,8 +125,15 @@ function App() {
                 </div>
                 <div className="card-wrapper">
                   {apiProfiles.map((p) => (
-                    // REMOVED: isDarkMode prop
-                    <NoteCard key={p.id} id={p.id} title={p.name} text={p.title} category="API" isApi={true} />
+                    <NoteCard 
+                      key={p.id} 
+                      id={p.id} 
+                      title={p.name} 
+                      text={p.title} 
+                      imageUrl={p.image_url} // Passing API image
+                      category="API" 
+                      isApi={true} 
+                    />
                   ))}
                 </div>
                </>
