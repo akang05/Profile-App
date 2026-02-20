@@ -44,12 +44,23 @@ const ProfileLayout = () => {
   );
 };
 
+// FIXED: Home now shows both Pinned AND the rest of your profiles
 const Home = ({ notes }) => (
   <>
     <Section title="Welcome"><Introduction /></Section>
+    
     <Section title="Pinned Notes">
       <div className="card-wrapper">
         {notes.filter(n => n.isPinned).map(note => (
+          <NoteCard key={`note-${note.id}`} {...note} />
+        ))}
+      </div>
+    </Section>
+
+    {/* NEW SECTION: This ensures your unpinned newly added profiles actually show up */}
+    <Section title="All Profiles">
+      <div className="card-wrapper">
+        {notes.filter(n => !n.isPinned).map(note => (
           <NoteCard key={`note-${note.id}`} {...note} />
         ))}
       </div>
@@ -68,11 +79,11 @@ function App() {
   const [notes, setNotes] = useState([
     { 
       id: 1, 
-      title: "Checkpoint 1 Task", 
-      text: "Submit the PDF proposal.", 
+      title: "Sample Profile", 
+      text: "This is a pinned example.", 
       category: "School", 
       isPinned: true,
-      imageUrl: "https://via.placeholder.com/150" // Example image
+      imageUrl: "https://picsum.photos/200" 
     }
   ]);
 
@@ -91,7 +102,7 @@ function App() {
       id: Date.now(), 
       title: newP.name, 
       text: newP.bio, 
-      imageUrl: newP.imageUrl, // FIXED: Correctly saving the image URL
+      imageUrl: newP.imageUrl, 
       category: "Personal", 
       isPinned: false 
     };
@@ -130,7 +141,7 @@ function App() {
                       id={p.id} 
                       title={p.name} 
                       text={p.title} 
-                      imageUrl={p.image_url} // Passing API image
+                      imageUrl={p.image_url} 
                       category="API" 
                       isApi={true} 
                     />
