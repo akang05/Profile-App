@@ -21,7 +21,6 @@ export function ThemeProvider({ children }) {
 }
 
 // 3. Define the hook
-// If ESLint still complains, you can add this comment above the line:
 // eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);

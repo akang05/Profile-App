@@ -18,7 +18,7 @@ function formReducer(state, action) {
 function AddProfileForm({ onAdd }) {
   const navigate = useNavigate();
   
-  // LAB 12: Implementing useReducer instead of multiple useStates
+  // Lab 12: Implementing useReducer instead of multiple useStates
   const [formData, dispatch] = useReducer(formReducer, initialState);
   const [errors, setErrors] = useState({});
 
