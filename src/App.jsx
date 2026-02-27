@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { HashRouter as Router, Routes, Route, useNavigate, Outlet } from 'react-router-dom';
+import { useLocalStorage } from './hooks';
 import { useTheme } from './context/ThemeContext'; 
 import Header from './components/Header';
 import NoteCard from './components/NoteCard';
@@ -48,7 +49,7 @@ const NotFound = () => <Section title="404">Oops! Page not found.</Section>;
 
 function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useLocalStorage("lastSearch", "");
   const [apiProfiles, setApiProfiles] = useState([]);      
   const [apiTitles, setApiTitles] = useState([]);          
   const [selectedApiTitle, setSelectedApiTitle] = useState(""); 
