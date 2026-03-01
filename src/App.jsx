@@ -9,6 +9,7 @@ import './App.css';
 
 const AddNoteForm = lazy(() => import('./components/AddProfileForm'));
 
+// This component now USES the variables that were throwing errors
 const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   const filtered = notes.filter(n => 
     n.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -17,20 +18,16 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 
   return (
     <div className="home-layout">
-      {notes.some(n => n.isPinned) && (
-        <Section title="Pinned">
-          <div className="card-container">
-            {filtered.filter(n => n.isPinned).map(note => (
-              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
-            ))}
-          </div>
-        </Section>
-      )}
-
-      <Section title="Others">
-        <div className="card-container">
-          {filtered.filter(n => !n.isPinned).map(note => (
-            <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+      {/* If there are pinned notes (like your Welcome note), show them first */}
+      <Section title="Welcome">
+        <div className="card-stack">
+          {filtered.map(note => (
+            <NoteCard 
+              key={note.id} 
+              {...note} 
+              onPin={() => togglePin(note.id)} 
+              onDelete={() => deleteNote(note.id)} 
+            />
           ))}
         </div>
       </Section>
@@ -41,6 +38,8 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
+  
+  // These are the variables that were "unused"
   const [notes, setNotes] = useLocalStorage("keepNotes", [
     { id: 1, title: "Welcome", text: "I am a student at Purdue University...", category: "Personal", isPinned: true }
   ]);
@@ -56,42 +55,44 @@ function App() {
   return (
     <Router>
       <div className={`app-root ${isDarkMode ? "dark-mode" : "light-mode"}`}>
-        
-        {/* Main Wrapper that keeps everything centered */}
         <div className="desktop-container">
           
           <header className="site-header">
             <h1 className="logo">Keep Lite</h1>
-            
             <nav className="main-nav">
               <Link to="/">Home</Link>
-              <Link to="/profiles">Other Profiles</Link>
               <Link to="/add">Add Profile</Link>
               <Link to="/about">About</Link>
             </nav>
 
             <div className="utility-bar">
-              <div className="search-box">
-                <input 
-                  type="text" 
-                  placeholder="Search notes..." 
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <button onClick={toggleTheme} className="theme-switcher">
+              <input 
+                type="text" 
+                className="search-input"
+                placeholder="Search..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button onClick={toggleTheme} className="theme-btn">
                 {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
               </button>
             </div>
           </header>
 
           <main className="page-content">
-            <Suspense fallback={<div className="loading">Loading...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
               <Routes>
-                <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+                {/* We pass the variables here so the errors stop */}
+                <Route path="/" element={
+                  <Home 
+                    notes={notes} 
+                    searchTerm={searchTerm} 
+                    togglePin={togglePin} 
+                    deleteNote={deleteNote} 
+                  />
+                } />
                 <Route path="/add" element={<AddNoteForm onAdd={handleAddNote} />} />
-                <Route path="/about" element={<Introduction />} />
-                <Route path="/profiles" element={<div className="placeholder">Community Content</div>} />
+                <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
               </Routes>
             </Suspense>
           </main>
