@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-d
 import { useLocalStorage } from './hooks'; 
 import { useTheme } from './context/ThemeContext'; 
 import Header from './components/Header';
+import Sidebar from './components/Sidebar'; // New Component
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
 import Introduction from './components/Introduction';
@@ -18,10 +19,12 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   );
 
   return (
-    <div className="keep-body">
-      {/* Google Keep Quick Add Bar */}
+    <div className="main-content">
       <div className="quick-add-container" onClick={() => navigate('/add')}>
-        <div className="quick-add-bar">Take a note...</div>
+        <div className="quick-add-bar">
+          <span>Take a note...</span>
+          <div className="quick-icons">☑️ 🖌️ 🖼️</div>
+        </div>
       </div>
 
       {notes.some(n => n.isPinned) && (
@@ -49,7 +52,7 @@ function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
   const [notes, setNotes] = useLocalStorage("keepNotes", [
-    { id: 1, title: "Keep Lite", text: "Click 'Take a note' to start!", category: "Tips", isPinned: true }
+    { id: 1, title: "Keep Lite", text: "Welcome to your Google Keep recreation!", category: "General", isPinned: true }
   ]);
 
   const togglePin = (id) => {
@@ -74,18 +77,21 @@ function App() {
 
   return (
     <Router>
-      <div className={isDarkMode ? "app-wrapper dark-mode" : "app-wrapper light-mode"}>
-        <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
+        <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
         
-        <Suspense fallback={<div className="no-results">Loading Keep...</div>}>
-          <Routes>
-            <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
-            <Route path="/add" element={<Section title="New Note"><AddNoteForm onAdd={handleAddNote} /></Section>} />
-            <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
-          </Routes>
-        </Suspense>
-
-        <button onClick={toggleTheme} className="theme-fab">{isDarkMode ? "☀️" : "🌙"}</button>
+        <div className="body-wrapper">
+          <Sidebar />
+          
+          <Suspense fallback={<div className="no-results">Loading Keep...</div>}>
+            <Routes>
+              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+              <Route path="/add" element={<Section title="New Note"><AddNoteForm onAdd={handleAddNote} /></Section>} />
+              <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
+              <Route path="/profiles" element={<Section title="Community">Browse community notes here.</Section>} />
+            </Routes>
+          </Suspense>
+        </div>
       </div>
     </Router>
   );
