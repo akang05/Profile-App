@@ -1,29 +1,93 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-}
-
-/* RESET BODY: Removed place-items center which was causing the black space */
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
+/* 1. Root & Full Screen Fix */
+.app-root {
   min-height: 100vh;
-  display: block; /* Changed from flex to block */
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s ease;
+  overflow-x: hidden;
 }
 
-/* Modern reset for links */
-a {
+.dark-mode { background-color: #121212 !important; color: #ceb888 !important; }
+.light-mode { background-color: #ffffff !important; color: #202124 !important; }
+
+/* 2. THE SINGLE-LINE NAV FIX */
+.main-header {
+  width: 100%;
+  border-bottom: 1px solid rgba(206, 184, 136, 0.2);
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  background: inherit;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between; /* Pushes Logo left, Links center, Utility right */
+  align-items: center;
+  padding: 0 30px;
+}
+
+.brand-logo-small {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ceb888;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  font-size: 0.95rem;
   font-weight: 500;
-  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: #ceb888; }
+
+.nav-utility {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-search-input {
+  width: 180px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid #ceb888;
+  background: rgba(150, 150, 150, 0.1);
   color: inherit;
 }
 
-button {
-  border-radius: 8px;
+.theme-toggle-compact {
+  background: #ceb888;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
   cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+/* 3. Content Area */
+.content-stage {
+  width: 100%;
+  max-width: 950px;
+  padding: 40px 20px;
+}
+
+.note-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
 }

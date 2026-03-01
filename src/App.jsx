@@ -8,7 +8,6 @@ import Introduction from './components/Introduction';
 import AddProfileForm from './components/AddProfileForm';
 import './App.css';
 
-// Logic for the Notes Grid
 const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   const filtered = notes.filter(n => 
     n.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -20,36 +19,23 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 
   return (
     <div className="home-layout">
-      {/* Visual Priority: Pinned Section */}
       {pinned.length > 0 && (
         <Section title="Pinned">
           <div className="note-grid">
             {pinned.map(note => (
-              <NoteCard 
-                key={note.id} 
-                {...note} 
-                onPin={() => togglePin(note.id)} 
-                onDelete={() => deleteNote(note.id)} 
-              />
+              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
             ))}
           </div>
         </Section>
       )}
-
-      {/* Others Section */}
       <Section title="Others">
         <div className="note-grid">
           {others.length > 0 ? (
             others.map(note => (
-              <NoteCard 
-                key={note.id} 
-                {...note} 
-                onPin={() => togglePin(note.id)} 
-                onDelete={() => deleteNote(note.id)} 
-              />
+              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
             ))
           ) : (
-            <p className="intro-text">No notes found matching your search.</p>
+            <p className="intro-text">No profiles found.</p>
           )}
         </div>
       </Section>
@@ -73,6 +59,7 @@ function App() {
       title: newP.name, 
       text: newP.bio, 
       category: newP.title || "Personal", 
+      imageUrl: newP.imageUrl,
       isPinned: false 
     };
     setNotes(prev => [newNote, ...prev]);
@@ -80,60 +67,39 @@ function App() {
 
   return (
     <Router>
-      {/* Root fills the whole screen width */}
       <div className={`app-root ${isDarkMode ? "dark-mode" : "light-mode"}`}>
-        
-        {/* Header matches CSS .main-header */}
         <header className="main-header">
-          <h1 className="brand-logo">Keep Lite</h1>
-          
-          <nav className="nav-bar">
-            <Link to="/">Home</Link>
-            <Link to="/">Other Profiles</Link> 
-            <Link to="/add">Add Profile</Link>
-            <Link to="/about">About</Link>
-          </nav>
-
-          <div className="search-row">
-            <input 
-              type="text" 
-              className="search-input"
-              placeholder="Search notes..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button onClick={toggleTheme} className="theme-toggle">
-              {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-            </button>
+          <div className="nav-container">
+            <h1 className="brand-logo-small">Keep Lite</h1>
+            <nav className="nav-links">
+              <Link to="/">Home</Link>
+              <Link to="/add">Add Profile</Link>
+              <Link to="/about">About</Link>
+            </nav>
+            <div className="nav-utility">
+              <input 
+                type="text" 
+                className="nav-search-input"
+                placeholder="Search..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button onClick={toggleTheme} className="theme-toggle-compact">
+                {isDarkMode ? "☀️" : "🌙"}
+              </button>
+            </div>
           </div>
         </header>
 
-        {/* Content stage handles the gold-bordered box area */}
         <main className="content-stage">
           <Suspense fallback={<div className="intro-text">Loading...</div>}>
             <Routes>
-              <Route path="/" element={
-                <Home 
-                  notes={notes} 
-                  searchTerm={searchTerm} 
-                  togglePin={togglePin} 
-                  deleteNote={deleteNote} 
-                />
-              } />
-              <Route path="/add" element={
-                <Section title="Add Profile">
-                  <AddProfileForm onAdd={handleAddNote} />
-                </Section>
-              } />
-              <Route path="/about" element={
-                <Section title="About Me">
-                  <Introduction />
-                </Section>
-              } />
+              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+              <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
+              <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
             </Routes>
           </Suspense>
         </main>
-        
       </div>
     </Router>
   );
