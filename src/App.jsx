@@ -4,8 +4,8 @@ import { useLocalStorage } from './hooks';
 import { useTheme } from './context/ThemeContext'; 
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
-import Introduction from './components/Introduction';
-import AddProfileForm from './components/AddProfileForm';
+import HowToUse from './components/HowToUse'; // Ensure this component exists
+import AddNoteForm from './components/AddNoteForm'; // Renamed from AddProfileForm
 import './App.css';
 
 const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
@@ -46,7 +46,7 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
               />
             ))
           ) : (
-            <p className="intro-text">No profiles found matching your search.</p>
+            <p className="intro-text">No notes found matching your search.</p>
           )}
         </div>
       </Section>
@@ -58,19 +58,19 @@ function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
   const [notes, setNotes] = useLocalStorage("keepNotes", [
-    { id: 1, title: "Welcome", text: "I am a student at Purdue...", category: "Personal", isPinned: true }
+    { id: 1, title: "Welcome", text: "Take a new note to get started!", category: "General", isPinned: true }
   ]);
 
   const togglePin = (id) => setNotes(prev => prev.map(n => n.id === id ? { ...n, isPinned: !n.isPinned } : n));
   const deleteNote = (id) => setNotes(prev => prev.filter(n => n.id !== id));
 
-  const handleAddNote = useCallback((newP) => {
+  const handleAddNote = useCallback((newN) => {
     const newNote = { 
       id: Date.now(), 
-      title: newP.name, 
-      text: newP.bio, 
-      category: newP.title || "Personal", 
-      imageUrl: newP.imageUrl,
+      title: newN.title, // Mapping from the form's 'title' field
+      text: newN.text,   // Mapping from the form's 'text' field
+      category: newN.category || "General", 
+      imageUrl: newN.imageUrl,
       isPinned: false 
     };
     setNotes(prev => [newNote, ...prev]);
@@ -85,8 +85,8 @@ function App() {
             
             <nav className="nav-links">
               <Link to="/">Home</Link>
-              <Link to="/add">Add Profile</Link>
-              <Link to="/about">About</Link>
+              <Link to="/add">New Note</Link>
+              <Link to="/how-to">How to Use</Link>
             </nav>
 
             <div className="nav-utility">
@@ -111,10 +111,14 @@ function App() {
                 <Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />
               } />
               <Route path="/add" element={
-                <Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>
+                <Section title="Create New Note">
+                  <AddNoteForm onAdd={handleAddNote} />
+                </Section>
               } />
-              <Route path="/about" element={
-                <Section title="About Me"><Introduction /></Section>
+              <Route path="/how-to" element={
+                <Section title="User Guide">
+                  <HowToUse />
+                </Section>
               } />
             </Routes>
           </Suspense>

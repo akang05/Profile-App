@@ -1,144 +1,94 @@
-/* 1. Global Reset & Root */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* --- Keep Sections 1, 2, and 3 as they are --- */
 
-.app-root {
-  min-height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: background 0.3s ease;
-  overflow-x: hidden;
-}
-
-.dark-mode { background-color: #121212 !important; color: #ceb888 !important; }
-.light-mode { background-color: #ffffff !important; color: #202124 !important; }
-
-/* 2. HEADER: Single Line Layout */
-.main-header {
+/* 4. THE NOTE FORM (Vertical Layout) */
+.form-container {
   width: 100%;
-  border-bottom: 1px solid rgba(206, 184, 136, 0.2);
-  padding: 15px 0;
   display: flex;
   justify-content: center;
-  background: inherit;
+  padding: 20px;
 }
 
-.nav-container {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-}
-
-.brand-logo-small {
-  font-size: 2rem;
-  font-weight: bold;
-  color: inherit;
-}
-
-/* Restores the clean link look from your previous version */
-.nav-links {
-  display: flex;
-  gap: 30px;
-}
-
-.nav-links a {
-  text-decoration: none; /* Removes the blue underline */
-  color: inherit; /* Takes the gold color in dark mode, dark color in light mode */
-  font-weight: bold;
-  font-size: 1.1rem;
-  transition: opacity 0.2s;
-}
-
-.nav-links a:hover {
-  opacity: 0.7;
-}
-
-.nav-utility {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.nav-search-input {
-  width: 250px;
-  padding: 8px 15px;
-  border-radius: 20px;
-  border: 1px solid #ceb888;
-  background: rgba(150, 150, 150, 0.1);
-  color: inherit;
-}
-
-.theme-toggle-compact {
-  background: transparent;
-  border: 1px solid #ceb888;
-  border-radius: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 3. Content Area */
-.content-stage {
-  width: 100%;
-  max-width: 950px;
-  padding: 40px 20px;
-}
-
-.note-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  width: 100%;
-}
-
-/* Add this to your existing CSS to fix the Form layout */
 .profile-form {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-direction: column; /* Forces vertical stack */
+  gap: 15px;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.profile-form input, .profile-form textarea {
+.input-group {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ceb888;
-  background: rgba(150, 150, 150, 0.05);
-  color: inherit;
+  gap: 12px;
 }
 
-/* Add this to style the 'Create Profile' button specifically */
+.profile-form input, 
+.profile-form textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(206, 184, 136, 0.4);
+  background: rgba(150, 150, 150, 0.05);
+  color: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.profile-form textarea {
+  min-height: 180px; /* More space for actual notes */
+  resize: vertical;
+}
+
+.profile-form input:focus, 
+.profile-form textarea:focus {
+  border-color: #ceb888;
+}
+
 .submit-btn {
+  width: 100%;
   padding: 12px;
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* The light grey look from your reference */
   color: #121212;
   border: none;
   font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
+  margin-top: 10px;
 }
 
 .submit-btn:hover {
   background-color: #ceb888;
 }
 
-/* Ensure images in the notes scale correctly */
-.note-grid img {
+/* 5. HOW TO USE / USER GUIDE */
+.how-to-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px 8px 0 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.how-to-step {
+  padding: 20px;
+  background: rgba(206, 184, 136, 0.03);
+  border-left: 5px solid #ceb888; /* Stylish gold accent line */
+  border-radius: 4px;
+  text-align: left;
+}
+
+.how-to-step h3 {
+  color: #ceb888;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.how-to-step p {
+  line-height: 1.6;
+  font-size: 1rem;
+  opacity: 0.9;
 }
