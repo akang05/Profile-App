@@ -1,9 +1,7 @@
-import { useState, useCallback, lazy, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { useCallback, lazy, Suspense } from 'react';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useLocalStorage } from './hooks'; 
 import { useTheme } from './context/ThemeContext'; 
-import Header from './components/Header';
-import Sidebar from './components/Sidebar'; 
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
 import Introduction from './components/Introduction';
@@ -18,16 +16,9 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   );
 
   return (
-    <div className="main-content-scroll">
-      <div className="quick-add-container">
-        <div className="quick-add-bar">
-          <span>Take a note...</span>
-          <div className="quick-icons">☑️ 🖌️ 🖼️</div>
-        </div>
-      </div>
-
+    <div className="home-container">
       {notes.some(n => n.isPinned) && (
-        <Section title="PINNED">
+        <Section title="Welcome">
           <div className="card-wrapper">
             {filtered.filter(n => n.isPinned).map(note => (
               <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
@@ -36,7 +27,7 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
         </Section>
       )}
 
-      <Section title="OTHERS">
+      <Section title="Others">
         <div className="card-wrapper">
           {filtered.filter(n => !n.isPinned).map(note => (
             <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
@@ -49,13 +40,11 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 
 function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
   const [notes, setNotes] = useLocalStorage("keepNotes", [
-    { id: 1, title: "Welcome", text: "I am a student at Purdue...", category: "Personal", isPinned: true }
+    { id: 1, title: "Welcome", text: "I am a student at Purdue University...", category: "Personal", isPinned: true }
   ]);
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const togglePin = (id) => setNotes(prev => prev.map(n => n.id === id ? { ...n, isPinned: !n.isPinned } : n));
   const deleteNote = (id) => setNotes(prev => prev.filter(n => n.id !== id));
 
@@ -67,25 +56,42 @@ function App() {
   return (
     <Router>
       <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
-        <Header 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm} 
-          toggleTheme={toggleTheme} 
-          toggleSidebar={toggleSidebar}
-        />
         
-        <div className="body-wrapper">
-          <Sidebar isOpen={isSidebarOpen} />
-          <main className="content-area">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Routes>
-                <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
-                <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
-                <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
-              </Routes>
-            </Suspense>
-          </main>
-        </div>
+        {/* Centered Header Section */}
+        <header className="original-header">
+          <h1 className="main-title">Keep Lite</h1>
+          <nav className="top-nav">
+            <Link to="/">Home</Link>
+            <Link to="/profiles">Other Profiles</Link>
+            <Link to="/add">Add Profile</Link>
+            <Link to="/about">About</Link>
+          </nav>
+          
+          <div className="controls">
+            <input 
+              type="text" 
+              className="top-search" 
+              placeholder="Search notes..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button onClick={toggleTheme} className="theme-btn">
+              {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+            </button>
+          </div>
+        </header>
+
+        <main className="centered-content">
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+              <Route path="/add" element={<AddNoteForm onAdd={handleAddNote} />} />
+              <Route path="/about" element={<Introduction />} />
+              <Route path="/profiles" element={<div className="placeholder-text">Community Profiles Coming Soon</div>} />
+            </Routes>
+          </Suspense>
+        </main>
+        
       </div>
     </Router>
   );
