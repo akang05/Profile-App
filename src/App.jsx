@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { HashRouter as Router, Routes, Route, useNavigate, Outlet } from 'react-router-dom';
-import { useLocalStorage } from './hooks';
+import { useCallback, lazy, Suspense } from 'react';
+import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { useLocalStorage } from './hooks'; 
 import { useTheme } from './context/ThemeContext'; 
 import Header from './components/Header';
 import NoteCard from './components/NoteCard';
@@ -8,73 +8,58 @@ import Section from './components/Section';
 import Introduction from './components/Introduction';
 import './App.css';
 
-// Lab 13 Optimization: Lazy load components
-const AddProfileForm = lazy(() => import('./components/AddProfileForm'));
-const ProfileDetail = lazy(() => import('./components/ProfileDetail'));
+const AddNoteForm = lazy(() => import('./components/AddProfileForm'));
 
-const ProfileLayout = () => {
+const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   const navigate = useNavigate();
+  const filtered = notes.filter(n => 
+    n.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    n.text.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <Section title="Profiles Explorer">
-      <button onClick={() => navigate(-1)} className="reset-button" style={{ marginBottom: '20px' }}>
-        ← Go Back
-      </button>
-      <Outlet />
-    </Section>
+    <div className="keep-body">
+      {/* Google Keep Quick Add Bar */}
+      <div className="quick-add-container" onClick={() => navigate('/add')}>
+        <div className="quick-add-bar">Take a note...</div>
+      </div>
+
+      {notes.some(n => n.isPinned) && (
+        <Section title="PINNED">
+          <div className="card-wrapper">
+            {filtered.filter(n => n.isPinned).map(note => (
+              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+            ))}
+          </div>
+        </Section>
+      )}
+
+      <Section title="OTHERS">
+        <div className="card-wrapper">
+          {filtered.filter(n => !n.isPinned).map(note => (
+            <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+          ))}
+        </div>
+      </Section>
+    </div>
   );
 };
 
-const Home = ({ notes }) => (
-  <>
-    <Section title="Welcome"><Introduction /></Section>
-    <Section title="Pinned Notes">
-      <div className="card-wrapper">
-        {notes.filter(n => n.isPinned).map(note => (
-          <NoteCard key={`note-${note.id}`} {...note} />
-        ))}
-      </div>
-    </Section>
-
-    <Section title="All Profiles">
-      <div className="card-wrapper">
-        {notes.filter(n => !n.isPinned).map(note => (
-          <NoteCard key={`note-${note.id}`} {...note} />
-        ))}
-      </div>
-    </Section>
-  </>
-);
-
-const NotFound = () => <Section title="404">Oops! Page not found.</Section>;
-
 function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
-  const [searchTerm, setSearchTerm] = useLocalStorage("lastSearch", "");
-  const [apiProfiles, setApiProfiles] = useState([]);      
-  const [apiTitles, setApiTitles] = useState([]);          
-  const [selectedApiTitle, setSelectedApiTitle] = useState(""); 
-  const [notes, setNotes] = useState([
-    { 
-      id: 1, 
-      title: "Sample Profile", 
-      text: "This is a pinned example.", 
-      category: "School", 
-      isPinned: true,
-      imageUrl: "https://picsum.photos/200" 
-    }
+  const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
+  const [notes, setNotes] = useLocalStorage("keepNotes", [
+    { id: 1, title: "Keep Lite", text: "Click 'Take a note' to start!", category: "Tips", isPinned: true }
   ]);
 
-  useEffect(() => {
-    fetch('https://web.ics.purdue.edu/~zong6/profile-app/get-titles.php')
-      .then(res => res.json()).then(data => setApiTitles(Array.isArray(data) ? data : []));
-  }, []);
+  const togglePin = (id) => {
+    setNotes(prev => prev.map(n => n.id === id ? { ...n, isPinned: !n.isPinned } : n));
+  };
 
-  useEffect(() => {
-    const url = `https://web.ics.purdue.edu/~zong6/profile-app/fetch-data-with-filter.php?title=${encodeURIComponent(selectedApiTitle)}&name=${encodeURIComponent(searchTerm)}`;
-    fetch(url).then(res => res.json()).then(data => setApiProfiles(Array.isArray(data) ? data : []));
-  }, [selectedApiTitle, searchTerm]);
+  const deleteNote = (id) => {
+    setNotes(prev => prev.filter(n => n.id !== id));
+  };
 
-  // Lab 13 Optimization: useCallback prevents the function from being re-created
   const handleAddNote = useCallback((newP) => {
     const newNote = { 
       id: Date.now(), 
@@ -85,56 +70,22 @@ function App() {
       isPinned: false 
     };
     setNotes(prev => [newNote, ...prev]);
-  }, []); 
+  }, [setNotes]);
 
   return (
     <Router>
       <div className={isDarkMode ? "app-wrapper dark-mode" : "app-wrapper light-mode"}>
-        <Header />
-        <div style={{ textAlign: 'center', margin: '15px' }}>
-          <button onClick={toggleTheme} className="reset-button">
-            {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-          </button>
-        </div>
-
-        {/* Lab 13 Optimization: Suspense handles the loading state for Lazy components */}
-        <Suspense fallback={<div style={{textAlign: 'center', padding: '50px', color: '#ceb888'}}>Loading Page Content...</div>}>
+        <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        
+        <Suspense fallback={<div className="no-results">Loading Keep...</div>}>
           <Routes>
-            <Route path="/" element={<Home notes={notes} />} />
-            <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
+            <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+            <Route path="/add" element={<Section title="New Note"><AddNoteForm onAdd={handleAddNote} /></Section>} />
             <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
-            
-            <Route path="/profiles" element={<ProfileLayout />}>
-                <Route index element={
-                  <>
-                   <div className="controls-wrapper" style={{marginBottom: '30px'}}>
-                     <input type="text" placeholder="Search API..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="search-input" />
-                     <select value={selectedApiTitle} onChange={(e) => setSelectedApiTitle(e.target.value)} className="filter-dropdown">
-                       <option value="">All Titles</option>
-                       {apiTitles.map((t, i) => <option key={i} value={t}>{t}</option>)}
-                     </select>
-                   </div>
-                   <div className="card-wrapper">
-                     {apiProfiles.map((p) => (
-                       <NoteCard 
-                         key={p.id} 
-                         id={p.id} 
-                         title={p.name} 
-                         text={p.title} 
-                         imageUrl={p.image_url} 
-                         category="API" 
-                         isApi={true} 
-                       />
-                     ))}
-                   </div>
-                  </>
-                } />
-                <Route path=":id" element={<ProfileDetail />} />
-            </Route>
-
-            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+
+        <button onClick={toggleTheme} className="theme-fab">{isDarkMode ? "☀️" : "🌙"}</button>
       </div>
     </Router>
   );

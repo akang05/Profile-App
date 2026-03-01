@@ -1,24 +1,31 @@
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({ searchTerm, setSearchTerm }) {
   return (
-    <header className="header-style">
-      <h1 style={{color: '#ceb888'}}>Keep Lite</h1>
-      <nav style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginTop: '10px' }}>
-        <Link to="/" style={navLinkStyle}>Home</Link>
-        <Link to="/profiles" style={navLinkStyle}>Other Profiles</Link>
-        <Link to="/add" style={navLinkStyle}>Add Profile</Link>
-        <Link to="/about" style={navLinkStyle}>About</Link>
+    <header className="keep-header">
+      <div className="header-left">
+        <div className="menu-icon">☰</div>
+        <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep Logo" />
+        <h1>Keep Lite</h1>
+      </div>
+      
+      <div className="header-center">
+        <div className="search-container">
+          <span className="search-icon">🔍</span>
+          <input 
+            type="text" 
+            placeholder="Search" 
+            value={searchTerm} 
+            onChange={(e) => setSearchTerm(e.target.value)} 
+          />
+        </div>
+      </div>
+
+      <nav className="header-right">
+        <Link to="/">Notes</Link>
+        <Link to="/about">About</Link>
       </nav>
     </header>
   );
 }
-
-const navLinkStyle = {
-  color: '#ceb888',
-  textDecoration: 'none',
-  fontWeight: 'bold',
-  fontSize: '1.1rem'
-};
-
 export default Header;
