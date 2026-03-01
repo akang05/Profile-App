@@ -82,6 +82,7 @@ function App() {
 
   return (
     <Router>
+      {/* The class here controls the entire screen background */}
       <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
         <Header 
           searchTerm={searchTerm} 

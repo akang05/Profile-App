@@ -4,8 +4,15 @@ function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode, toggleSide
   return (
     <header className="keep-header">
       <div className="header-left">
-        <span className="menu-btn" onClick={toggleSidebar}>☰</span>
-        <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="logo" className="keep-logo" />
+        {/* The 3-line menu button that controls the Sidebar collapse */}
+        <div className="menu-btn" onClick={toggleSidebar} title="Main menu">
+          ☰
+        </div>
+        <img 
+          src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" 
+          alt="Keep Logo" 
+          className="keep-logo" 
+        />
         <h1 className="brand-name">Keep Lite</h1>
       </div>
 
@@ -22,7 +29,8 @@ function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode, toggleSide
       </div>
 
       <div className="header-right">
-        <button onClick={toggleTheme} className="theme-toggle">
+        {/* Theme toggle button */}
+        <button onClick={toggleTheme} className="theme-toggle-btn">
           {isDarkMode ? "☀️" : "🌙"}
         </button>
       </div>
