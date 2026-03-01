@@ -16,10 +16,10 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   );
 
   return (
-    <div className="content-stack">
+    <div className="home-layout">
       {notes.some(n => n.isPinned) && (
         <Section title="Pinned">
-          <div className="card-grid">
+          <div className="card-container">
             {filtered.filter(n => n.isPinned).map(note => (
               <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
             ))}
@@ -28,7 +28,7 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
       )}
 
       <Section title="Others">
-        <div className="card-grid">
+        <div className="card-container">
           {filtered.filter(n => !n.isPinned).map(note => (
             <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
           ))}
@@ -55,45 +55,48 @@ function App() {
 
   return (
     <Router>
-      <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
+      <div className={`app-root ${isDarkMode ? "dark-mode" : "light-mode"}`}>
         
-        <header className="desktop-header">
-          <h1 className="brand-title">Keep Lite</h1>
+        {/* Main Wrapper that keeps everything centered */}
+        <div className="desktop-container">
           
-          <nav className="horizontal-nav">
-            <Link to="/">Home</Link>
-            <Link to="/profiles">Other Profiles</Link>
-            <Link to="/add">Add Profile</Link>
-            <Link to="/about">About</Link>
-          </nav>
+          <header className="site-header">
+            <h1 className="logo">Keep Lite</h1>
+            
+            <nav className="main-nav">
+              <Link to="/">Home</Link>
+              <Link to="/profiles">Other Profiles</Link>
+              <Link to="/add">Add Profile</Link>
+              <Link to="/about">About</Link>
+            </nav>
 
-          <div className="action-bar">
-            <div className="search-wrapper">
-              <span className="icon">🔍</span>
-              <input 
-                type="text" 
-                placeholder="Search notes..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <div className="utility-bar">
+              <div className="search-box">
+                <input 
+                  type="text" 
+                  placeholder="Search notes..." 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <button onClick={toggleTheme} className="theme-switcher">
+                {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+              </button>
             </div>
-            <button onClick={toggleTheme} className="mode-toggle">
-              {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-            </button>
-          </div>
-        </header>
+          </header>
 
-        <main className="main-viewport">
-          <Suspense fallback={<div className="status">Loading...</div>}>
-            <Routes>
-              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
-              <Route path="/add" element={<AddNoteForm onAdd={handleAddNote} />} />
-              <Route path="/about" element={<Introduction />} />
-              <Route path="/profiles" element={<div className="status">Community Profiles Section</div>} />
-            </Routes>
-          </Suspense>
-        </main>
-        
+          <main className="page-content">
+            <Suspense fallback={<div className="loading">Loading...</div>}>
+              <Routes>
+                <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+                <Route path="/add" element={<AddNoteForm onAdd={handleAddNote} />} />
+                <Route path="/about" element={<Introduction />} />
+                <Route path="/profiles" element={<div className="placeholder">Community Content</div>} />
+              </Routes>
+            </Suspense>
+          </main>
+          
+        </div>
       </div>
     </Router>
   );
