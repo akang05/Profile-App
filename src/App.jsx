@@ -4,8 +4,8 @@ import { useLocalStorage } from './hooks';
 import { useTheme } from './context/ThemeContext'; 
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
-import HowToUse from './components/HowToUse'; // Ensure this component exists
-import AddNoteForm from './components/AddNoteForm'; // Renamed from AddProfileForm
+import HowToUse from './components/HowToUse'; 
+import AddNoteForm from './components/AddNoteForm'; 
 import './App.css';
 
 const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
@@ -67,8 +67,8 @@ function App() {
   const handleAddNote = useCallback((newN) => {
     const newNote = { 
       id: Date.now(), 
-      title: newN.title, // Mapping from the form's 'title' field
-      text: newN.text,   // Mapping from the form's 'text' field
+      title: newN.title, 
+      text: newN.text,   
       category: newN.category || "General", 
       imageUrl: newN.imageUrl,
       isPinned: false 
@@ -111,12 +111,12 @@ function App() {
                 <Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />
               } />
               <Route path="/add" element={
-                <Section title="Create New Note">
+                <Section>
                   <AddNoteForm onAdd={handleAddNote} />
                 </Section>
               } />
               <Route path="/how-to" element={
-                <Section title="User Guide">
+                <Section>
                   <HowToUse />
                 </Section>
               } />

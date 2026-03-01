@@ -1,20 +1,128 @@
-/* --- Keep Sections 1, 2, and 3 as they are --- */
-
-/* 4. THE NOTE FORM (Vertical Layout) */
-.form-container {
+/* 1. Global Reset & Root */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #121212; 
+  overflow-x: hidden; 
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.app-root {
+  min-height: 100vh;
+  width: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.dark-mode { background-color: #121212 !important; color: #ceb888 !important; }
+.light-mode { background-color: #ffffff !important; color: #202124 !important; }
+
+/* 2. HEADER: Single Line Layout */
+.main-header {
+  width: 100%;
+  border-bottom: 1px solid rgba(206, 184, 136, 0.2);
+  padding: 15px 0;
+  display: flex;
+  justify-content: center;
+  background: inherit;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.brand-logo-small {
+  font-size: 2rem;
+  font-weight: bold;
+  color: inherit;
+}
+
+/* FIX: Clean Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
+  text-decoration: none; /* Removes underlines */
+  color: inherit;       /* Removes blue/purple link colors */
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: opacity 0.2s;
+}
+
+.nav-links a:hover {
+  opacity: 0.7;
+}
+
+.nav-links a:visited {
+  color: inherit; /* Prevents purple color after clicking */
+}
+
+.nav-utility {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-search-input {
+  width: 250px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid #ceb888;
+  background: rgba(150, 150, 150, 0.1);
+  color: inherit;
+}
+
+.theme-toggle-compact {
+  background: transparent;
+  border: 1px solid #ceb888;
+  border-radius: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* 3. Content Area */
+.content-stage {
+  width: 100%;
+  max-width: 950px;
+  padding: 40px 20px;
+}
+
+.note-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* 4. THE NOTE FORM */
 .profile-form {
   display: flex;
-  flex-direction: column; /* Forces vertical stack */
+  flex-direction: column;
   gap: 15px;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  text-align: left;
+}
+
+.intro-title {
+  margin-bottom: 10px;
+  color: #ceb888;
 }
 
 .input-group {
@@ -34,23 +142,12 @@
   color: inherit;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.2s;
-}
-
-.profile-form textarea {
-  min-height: 180px; /* More space for actual notes */
-  resize: vertical;
-}
-
-.profile-form input:focus, 
-.profile-form textarea:focus {
-  border-color: #ceb888;
 }
 
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background-color: #f0f0f0; /* The light grey look from your reference */
+  background-color: #f0f0f0;
   color: #121212;
   border: none;
   font-weight: bold;
@@ -63,7 +160,7 @@
   background-color: #ceb888;
 }
 
-/* 5. HOW TO USE / USER GUIDE */
+/* 5. HOW TO USE */
 .how-to-content {
   display: flex;
   flex-direction: column;
@@ -76,19 +173,7 @@
 .how-to-step {
   padding: 20px;
   background: rgba(206, 184, 136, 0.03);
-  border-left: 5px solid #ceb888; /* Stylish gold accent line */
+  border-left: 5px solid #ceb888;
   border-radius: 4px;
   text-align: left;
-}
-
-.how-to-step h3 {
-  color: #ceb888;
-  margin-bottom: 8px;
-  font-size: 1.2rem;
-}
-
-.how-to-step p {
-  line-height: 1.6;
-  font-size: 1rem;
-  opacity: 0.9;
 }
