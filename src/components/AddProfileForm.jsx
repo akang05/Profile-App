@@ -11,7 +11,8 @@ const AddProfileForm = ({ onAdd }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Validation: ensure required fields are present
+    
+    // Simple validation
     if (!formData.name || !formData.bio) {
       alert("Please fill in the Name and Bio fields.");
       return;
@@ -24,50 +25,50 @@ const AddProfileForm = ({ onAdd }) => {
   };
 
   return (
-    <div className="form-section"> {/* Changed wrapper to match our new centering CSS */}
+    <div className="form-container">
       <form className="profile-form" onSubmit={handleSubmit}>
-        <h2 className="intro-title" style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
-          Create New Profile
-        </h2>
+        <h2 className="intro-title">Create New Profile</h2>
         
-        <input 
-          type="text" 
-          placeholder="Name" 
-          value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
-          required
-        />
+        <div className="input-group">
+          <input 
+            type="text" 
+            placeholder="Name" 
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            required
+          />
+          
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
+          />
+          
+          <input 
+            type="text" 
+            placeholder="Job Title" 
+            value={formData.title}
+            onChange={(e) => setFormData({...formData, title: e.target.value})}
+          />
+          
+          <textarea 
+            placeholder="Write a short bio..." 
+            rows="4"
+            value={formData.bio}
+            onChange={(e) => setFormData({...formData, bio: e.target.value})}
+            required
+          />
+          
+          <input 
+            type="text" 
+            placeholder="Image URL (Optional)" 
+            value={formData.imageUrl}
+            onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+          />
+        </div>
         
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={formData.email}
-          onChange={(e) => setFormData({...formData, email: e.target.value})}
-        />
-        
-        <input 
-          type="text" 
-          placeholder="Job Title" 
-          value={formData.title}
-          onChange={(e) => setFormData({...formData, title: e.target.value})}
-        />
-        
-        <textarea 
-          placeholder="Write a short bio..." 
-          rows="4"
-          value={formData.bio}
-          onChange={(e) => setFormData({...formData, bio: e.target.value})}
-          required
-        />
-        
-        <input 
-          type="text" 
-          placeholder="Image URL (Optional)" 
-          value={formData.imageUrl}
-          onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-        />
-        
-        <button type="submit" className="theme-btn" style={{ width: '100%', marginTop: '10px' }}>
+        <button type="submit" className="submit-btn">
           Create Profile
         </button>
       </form>

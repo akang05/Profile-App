@@ -23,19 +23,30 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
         <Section title="Pinned">
           <div className="note-grid">
             {pinned.map(note => (
-              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+              <NoteCard 
+                key={note.id} 
+                {...note} 
+                onPin={() => togglePin(note.id)} 
+                onDelete={() => deleteNote(note.id)} 
+              />
             ))}
           </div>
         </Section>
       )}
+
       <Section title="Others">
         <div className="note-grid">
           {others.length > 0 ? (
             others.map(note => (
-              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+              <NoteCard 
+                key={note.id} 
+                {...note} 
+                onPin={() => togglePin(note.id)} 
+                onDelete={() => deleteNote(note.id)} 
+              />
             ))
           ) : (
-            <p className="intro-text">No profiles found.</p>
+            <p className="intro-text">No profiles found matching your search.</p>
           )}
         </div>
       </Section>
@@ -47,7 +58,7 @@ function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
   const [notes, setNotes] = useLocalStorage("keepNotes", [
-    { id: 1, title: "Welcome", text: "I am a student at Purdue University...", category: "Personal", isPinned: true }
+    { id: 1, title: "Welcome", text: "I am a student at Purdue...", category: "Personal", isPinned: true }
   ]);
 
   const togglePin = (id) => setNotes(prev => prev.map(n => n.id === id ? { ...n, isPinned: !n.isPinned } : n));
@@ -71,11 +82,13 @@ function App() {
         <header className="main-header">
           <div className="nav-container">
             <h1 className="brand-logo-small">Keep Lite</h1>
+            
             <nav className="nav-links">
               <Link to="/">Home</Link>
               <Link to="/add">Add Profile</Link>
               <Link to="/about">About</Link>
             </nav>
+
             <div className="nav-utility">
               <input 
                 type="text" 
@@ -94,9 +107,15 @@ function App() {
         <main className="content-stage">
           <Suspense fallback={<div className="intro-text">Loading...</div>}>
             <Routes>
-              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
-              <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
-              <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
+              <Route path="/" element={
+                <Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />
+              } />
+              <Route path="/add" element={
+                <Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>
+              } />
+              <Route path="/about" element={
+                <Section title="About Me"><Introduction /></Section>
+              } />
             </Routes>
           </Suspense>
         </main>

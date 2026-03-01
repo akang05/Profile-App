@@ -1,51 +1,59 @@
 .card {
   position: relative;
-  display: flex; /* Changed to flex for better vertical stacking */
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 20px;
-  break-inside: avoid;
-  background: rgba(150, 150, 150, 0.1); /* Matches your dark theme */
-  border: 1px solid rgba(206, 184, 136, 0.3);
   border-radius: 12px;
-  padding: 15px;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  background: rgba(150, 150, 150, 0.1);
+  border: 1px solid rgba(206, 184, 136, 0.3);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  border-color: #ceb888;
+.cardFeatured {
+  border: 2px solid #ceb888; /* Highlight pinned notes */
 }
 
-/* Ensure the image is a block and has a minimum presence */
+.lightMode {
+  background: #ffffff;
+  border-color: #ddd;
+  color: #202124;
+}
+
 .cardImg {
-  width: calc(100% + 30px); /* Stretches to edges of padded card */
-  margin: -15px -15px 15px -15px; /* Pulls image to the top/sides */
-  height: 200px; /* Force a height so it doesn't stay 0px */
-  object-fit: cover; /* Prevents squashing */
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
   border-bottom: 1px solid rgba(206, 184, 136, 0.2);
+}
+
+.cardContent {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .pinBtn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent circle */
-  border-radius: 50%;
-  padding: 5px;
-  border: none;
-  cursor: pointer;
   z-index: 10;
-  opacity: 0;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  opacity: 0; /* Hidden by default */
   transition: opacity 0.2s;
 }
 
 .card:hover .pinBtn {
-  opacity: 1;
+  opacity: 1; /* Show on hover */
 }
 
 .cardActions {
-  margin-top: auto; /* Pushes delete button to the bottom */
+  margin-top: 10px;
   display: flex;
   justify-content: flex-end;
   opacity: 0;
@@ -54,4 +62,24 @@
 
 .card:hover .cardActions {
   opacity: 1;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.categoryTag {
+  font-size: 0.7rem;
+  color: #ceb888;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.widthDisplay {
+  font-size: 0.6rem;
+  opacity: 0.5;
+  margin-top: 5px;
 }

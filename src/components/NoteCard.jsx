@@ -8,12 +8,15 @@ function NoteCard({ title, text, category, isPinned, imageUrl, onPin, onDelete }
   const [width, setWidth] = useState(0);
 
   useLayoutEffect(() => {
-    if (cardRef.current) {
-      setWidth(cardRef.current.offsetWidth);
-    }
+    const updateWidth = () => {
+      if (cardRef.current) setWidth(cardRef.current.offsetWidth);
+    };
+    
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
   }, []); 
 
-  // FIX: Using the 'width' variable to dynamically change the card's appearance
   const cardStyle = {
     boxShadow: width > 300 
       ? '0 10px 20px rgba(0,0,0,0.4)' 
@@ -24,26 +27,33 @@ function NoteCard({ title, text, category, isPinned, imageUrl, onPin, onDelete }
   return (
     <div 
       ref={cardRef} 
-      style={cardStyle} // Width is now being "read" here
-      className={`${styles.card} ${isPinned ? styles.cardFeatured : styles.cardStandard} ${!isDarkMode ? styles.lightMode : ""}`}
+      style={cardStyle} 
+      className={`
+        ${styles.card} 
+        ${isPinned ? styles.cardFeatured : styles.cardStandard} 
+        ${!isDarkMode ? styles.lightMode : ""}
+      `}
     >
-      <button className={styles.pinBtn} onClick={onPin}>
+      <button className={styles.pinBtn} onClick={onPin} title="Pin Note">
         {isPinned ? "📌" : "📍"}
       </button>
       
       {imageUrl && <img src={imageUrl} alt={title} className={styles.cardImg} />}
       
-      <p className={styles.categoryTag}>{category}</p>
-      <h3>{title}</h3>
-      <p>{text}</p>
-      
-      {/* Optional: Visual proof of width measurement for your lab requirement */}
-      <p style={{ fontSize: '0.6rem', opacity: 0.5, marginTop: '10px' }}>
-        Note width: {width}px
-      </p>
-      
-      <div className={styles.cardActions}>
-        <button onClick={onDelete} className={styles.deleteBtn}>🗑️</button>
+      <div className={styles.cardContent}>
+        <p className={styles.categoryTag}>{category}</p>
+        <h3 className={styles.cardTitle}>{title}</h3>
+        <p className={styles.cardText}>{text}</p>
+        
+        <p className={styles.widthDisplay}>
+          Width: {width}px
+        </p>
+        
+        <div className={styles.cardActions}>
+          <button onClick={onDelete} className={styles.deleteBtn} title="Delete Note">
+            🗑️
+          </button>
+        </div>
       </div>
     </div>
   );
