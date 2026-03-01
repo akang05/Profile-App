@@ -80,7 +80,7 @@ function App() {
               <input 
                 type="text" 
                 className="nav-search-input"
-                placeholder="Search..." 
+                placeholder="Search notes..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
