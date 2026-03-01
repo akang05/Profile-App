@@ -16,10 +16,10 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
   );
 
   return (
-    <div className="home-container">
+    <div className="content-stack">
       {notes.some(n => n.isPinned) && (
-        <Section title="Welcome">
-          <div className="card-wrapper">
+        <Section title="Pinned">
+          <div className="card-grid">
             {filtered.filter(n => n.isPinned).map(note => (
               <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
             ))}
@@ -28,7 +28,7 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
       )}
 
       <Section title="Others">
-        <div className="card-wrapper">
+        <div className="card-grid">
           {filtered.filter(n => !n.isPinned).map(note => (
             <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
           ))}
@@ -57,37 +57,39 @@ function App() {
     <Router>
       <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
         
-        {/* Centered Header Section */}
-        <header className="original-header">
-          <h1 className="main-title">Keep Lite</h1>
-          <nav className="top-nav">
+        <header className="desktop-header">
+          <h1 className="brand-title">Keep Lite</h1>
+          
+          <nav className="horizontal-nav">
             <Link to="/">Home</Link>
             <Link to="/profiles">Other Profiles</Link>
             <Link to="/add">Add Profile</Link>
             <Link to="/about">About</Link>
           </nav>
-          
-          <div className="controls">
-            <input 
-              type="text" 
-              className="top-search" 
-              placeholder="Search notes..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button onClick={toggleTheme} className="theme-btn">
+
+          <div className="action-bar">
+            <div className="search-wrapper">
+              <span className="icon">🔍</span>
+              <input 
+                type="text" 
+                placeholder="Search notes..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <button onClick={toggleTheme} className="mode-toggle">
               {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
             </button>
           </div>
         </header>
 
-        <main className="centered-content">
-          <Suspense fallback={<div>Loading...</div>}>
+        <main className="main-viewport">
+          <Suspense fallback={<div className="status">Loading...</div>}>
             <Routes>
               <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
               <Route path="/add" element={<AddNoteForm onAdd={handleAddNote} />} />
               <Route path="/about" element={<Introduction />} />
-              <Route path="/profiles" element={<div className="placeholder-text">Community Profiles Coming Soon</div>} />
+              <Route path="/profiles" element={<div className="status">Community Profiles Section</div>} />
             </Routes>
           </Suspense>
         </main>

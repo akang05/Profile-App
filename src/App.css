@@ -1,83 +1,114 @@
-/* Global styles to match image_04a544.png */
+/* Reset and Base Layout */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 .app-container {
   min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  transition: background 0.3s ease;
+  align-items: center; /* Centers everything on the screen */
+  background-attachment: fixed;
 }
 
+/* Theme Colors */
 .dark-mode { background-color: #121212; color: #ceb888; }
 .light-mode { background-color: #ffffff; color: #202124; }
 
-/* Header Branding */
-.original-header {
-  text-align: center;
-  padding: 40px 20px;
+/* Header Section */
+.desktop-header {
   width: 100%;
+  max-width: 900px; /* Constrains the header width */
+  padding: 40px 0;
+  text-align: center;
 }
 
-.main-title {
-  font-size: 3rem;
+.brand-title {
+  font-size: 3.5rem;
   margin-bottom: 20px;
-  font-weight: bold;
 }
 
-/* Horizontal Top Navigation */
-.top-nav {
+.horizontal-nav {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  margin-bottom: 25px;
+  gap: 35px;
+  margin-bottom: 30px;
 }
 
-.top-nav a {
+.horizontal-nav a {
   text-decoration: none;
   color: inherit;
   font-weight: 600;
   font-size: 1.1rem;
+  transition: opacity 0.2s;
 }
 
-.top-nav a:hover { text-decoration: underline; }
+.horizontal-nav a:hover { opacity: 0.7; }
 
-/* Controls Section */
-.controls {
+/* Search and Toggle Bar */
+.action-bar {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
-.top-search {
-  padding: 10px 20px;
-  border-radius: 20px;
+.search-wrapper {
+  background: rgba(150, 150, 150, 0.1);
   border: 1px solid #ceb888;
-  background: transparent;
-  color: inherit;
-  width: 300px;
+  border-radius: 25px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  width: 350px;
 }
 
-.theme-btn {
-  padding: 10px 25px;
+.search-wrapper input {
+  background: transparent;
+  border: none;
+  color: inherit;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+}
+
+.mode-toggle {
+  padding: 10px 20px;
   border-radius: 8px;
   border: none;
   background-color: #ceb888;
   color: #121212;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
 }
 
-/* Content Area */
-.centered-content {
+/* Main Content Styling */
+.main-viewport {
   width: 100%;
-  max-width: 900px;
-  padding: 20px;
+  max-width: 900px; /* Matches header for a clean vertical line */
+  padding-bottom: 100px;
 }
 
-.card-wrapper {
+.content-stack {
   display: flex;
   flex-direction: column;
+  gap: 30px;
+}
+
+.section-container {
+  border: 1px solid #ceb888;
+  border-radius: 12px;
+  padding: 30px;
+  width: 100%;
+}
+
+/* Card Grid for Desktop */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
