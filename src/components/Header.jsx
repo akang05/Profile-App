@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 
-function Header({ searchTerm, setSearchTerm }) {
+function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode }) {
   return (
     <header className="keep-header">
       <div className="header-left">
-        <div className="menu-icon">☰</div>
-        <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep Logo" />
-        <h1>Keep Lite</h1>
+        <span className="menu-btn">☰</span>
+        <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="logo" className="keep-logo" />
+        <h1 className="brand-name">Keep Lite</h1>
       </div>
-      
+
       <div className="header-center">
-        <div className="search-container">
+        <div className="search-bar">
           <span className="search-icon">🔍</span>
           <input 
             type="text" 
@@ -21,11 +21,13 @@ function Header({ searchTerm, setSearchTerm }) {
         </div>
       </div>
 
-      <nav className="header-right">
-        <Link to="/">Notes</Link>
-        <Link to="/about">About</Link>
-      </nav>
+      <div className="header-right">
+        <button onClick={toggleTheme} className="theme-toggle">
+          {isDarkMode ? "☀️" : "🌙"}
+        </button>
+      </div>
     </header>
   );
 }
+
 export default Header;

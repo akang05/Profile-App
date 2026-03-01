@@ -3,18 +3,18 @@ import { NavLink } from 'react-router-dom';
 function Sidebar() {
   return (
     <aside className="keep-sidebar">
-      <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-        <span className="icon">💡</span> <span className="label">Notes</span>
+      <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+        <span className="nav-icon">💡</span> <span className="nav-text">Notes</span>
       </NavLink>
-      <NavLink to="/profiles" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-        <span className="icon">👥</span> <span className="label">Community</span>
+      <NavLink to="/profiles" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+        <span className="nav-icon">👥</span> <span className="nav-text">Other Profiles</span>
       </NavLink>
-      <NavLink to="/about" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-        <span className="icon">ℹ️</span> <span className="label">About</span>
+      <NavLink to="/add" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+        <span className="nav-icon">➕</span> <span className="nav-text">Add Profile</span>
       </NavLink>
-      <div className="nav-item">
-        <span className="icon">🗑️</span> <span className="label">Trash</span>
-      </div>
+      <NavLink to="/about" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+        <span className="nav-icon">ℹ️</span> <span className="nav-text">About</span>
+      </NavLink>
     </aside>
   );
 }

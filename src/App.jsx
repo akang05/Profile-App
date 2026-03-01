@@ -3,7 +3,7 @@ import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-d
 import { useLocalStorage } from './hooks'; 
 import { useTheme } from './context/ThemeContext'; 
 import Header from './components/Header';
-import Sidebar from './components/Sidebar'; // New Component
+import Sidebar from './components/Sidebar'; 
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
 import Introduction from './components/Introduction';
@@ -20,10 +20,13 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 
   return (
     <div className="main-content">
+      {/* Authentic Quick Add Bar */}
       <div className="quick-add-container" onClick={() => navigate('/add')}>
         <div className="quick-add-bar">
-          <span>Take a note...</span>
-          <div className="quick-icons">☑️ 🖌️ 🖼️</div>
+          <span className="placeholder-text">Take a note...</span>
+          <div className="quick-icons">
+            <span>☑️</span> <span>🖌️</span> <span>🖼️</span>
+          </div>
         </div>
       </div>
 
@@ -52,7 +55,7 @@ function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
   const [notes, setNotes] = useLocalStorage("keepNotes", [
-    { id: 1, title: "Keep Lite", text: "Welcome to your Google Keep recreation!", category: "General", isPinned: true }
+    { id: 1, title: "Welcome", text: "I am a student at Purdue University...", category: "Personal", isPinned: true }
   ]);
 
   const togglePin = (id) => {
@@ -78,18 +81,25 @@ function App() {
   return (
     <Router>
       <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
-        <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
+        <Header 
+          searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm} 
+          toggleTheme={toggleTheme} 
+          isDarkMode={isDarkMode} 
+        />
         
         <div className="body-wrapper">
           <Sidebar />
           
-          <Suspense fallback={<div className="no-results">Loading Keep...</div>}>
-            <Routes>
-              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
-              <Route path="/add" element={<Section title="New Note"><AddNoteForm onAdd={handleAddNote} /></Section>} />
-              <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
-              <Route path="/profiles" element={<Section title="Community">Browse community notes here.</Section>} />
-            </Routes>
+          <Suspense fallback={<div className="no-results">Loading...</div>}>
+            <div className="content-area">
+              <Routes>
+                <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
+                <Route path="/add" element={<Section title="Add Profile"><AddNoteForm onAdd={handleAddNote} /></Section>} />
+                <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
+                <Route path="/profiles" element={<Section title="Other Profiles">Community content goes here.</Section>} />
+              </Routes>
+            </div>
           </Suspense>
         </div>
       </div>
