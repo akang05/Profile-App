@@ -1,4 +1,4 @@
-import { useCallback, lazy, Suspense } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { useLocalStorage } from './hooks'; 
 import { useTheme } from './context/ThemeContext'; 
@@ -20,7 +20,6 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 
   return (
     <div className="main-content">
-      {/* Authentic Quick Add Bar */}
       <div className="quick-add-container" onClick={() => navigate('/add')}>
         <div className="quick-add-bar">
           <span className="placeholder-text">Take a note...</span>
@@ -53,10 +52,13 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 
 function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
   const [notes, setNotes] = useLocalStorage("keepNotes", [
     { id: 1, title: "Welcome", text: "I am a student at Purdue University...", category: "Personal", isPinned: true }
   ]);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const togglePin = (id) => {
     setNotes(prev => prev.map(n => n.id === id ? { ...n, isPinned: !n.isPinned } : n));
@@ -86,12 +88,13 @@ function App() {
           setSearchTerm={setSearchTerm} 
           toggleTheme={toggleTheme} 
           isDarkMode={isDarkMode} 
+          toggleSidebar={toggleSidebar}
         />
         
         <div className="body-wrapper">
-          <Sidebar />
+          <Sidebar isOpen={isSidebarOpen} />
           
-          <Suspense fallback={<div className="no-results">Loading...</div>}>
+          <Suspense fallback={<div className="loading-screen">Loading...</div>}>
             <div className="content-area">
               <Routes>
                 <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />

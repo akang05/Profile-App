@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
-function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode }) {
+function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode, toggleSidebar }) {
   return (
     <header className="keep-header">
       <div className="header-left">
-        <span className="menu-btn">☰</span>
+        <span className="menu-btn" onClick={toggleSidebar}>☰</span>
         <img src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="logo" className="keep-logo" />
         <h1 className="brand-name">Keep Lite</h1>
       </div>
