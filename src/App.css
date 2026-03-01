@@ -5,20 +5,28 @@
   padding: 0;
 }
 
-/* 2. Root Container - THE CENTERING ENGINE */
+/* 2. THE FULL-SCREEN FIX */
 .app-root {
   min-height: 100vh;
-  width: 100%;
+  width: 100vw; /* Forces background to fill left-to-right */
   display: flex;
   flex-direction: column;
   align-items: center; 
   transition: background 0.3s ease;
+  overflow-x: hidden; /* Prevents unwanted horizontal scroll */
 }
 
-.dark-mode { background-color: #121212; color: #ceb888; }
-.light-mode { background-color: #ffffff; color: #202124; }
+/* Theme Colors - Added !important to override any index.css leftovers */
+.dark-mode { 
+  background-color: #121212 !important; 
+  color: #ceb888 !important; 
+}
+.light-mode { 
+  background-color: #ffffff !important; 
+  color: #202124 !important; 
+}
 
-/* 3. Header Styling */
+/* 3. Header - Centered but stays within 850px */
 .main-header {
   width: 100%;
   max-width: 850px;
@@ -38,52 +46,56 @@
   margin-bottom: 25px;
 }
 
-.nav-bar a {
-  text-decoration: none;
-  color: inherit;
-  font-weight: bold;
-  font-size: 1.1rem;
+.nav-bar a:hover {
+  text-decoration: underline;
+  color: #ceb888;
 }
 
+/* 4. Search & Light Mode Button */
 .search-row {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 15px;
 }
 
 .search-input {
   width: 300px;
-  padding: 10px 15px;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border-radius: 25px;
   border: 1px solid #ceb888;
   background: transparent;
   color: inherit;
 }
 
-/* 4. Content Stage - THE BOX FORMAT */
+.theme-toggle {
+  padding: 10px 20px;
+  background-color: #ceb888;
+  color: #121212;
+  border: none;
+  font-weight: bold;
+}
+
+/* 5. The Content Stage (The Gold Box Area) */
 .content-stage {
   width: 100%;
   max-width: 850px;
-  padding: 0 20px 50px 20px;
+  padding: 20px;
 }
 
-/* 5. FIXED: Merged Section Container */
 .section-container {
   border: 2px solid #ceb888;
   border-radius: 20px;
   padding: 60px 40px;
-  background-color: rgba(206, 184, 136, 0.02);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 300px;
-  gap: 30px; /* Consistent spacing for children */
+  gap: 30px;
   margin-bottom: 40px;
 }
 
-/* 6. Grid Layout for NoteCards (Added this for your MVP) */
+/* 6. Note Grid for MVP */
 .note-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -91,7 +103,7 @@
   width: 100%;
 }
 
-/* 7. Form Spacing Fix */
+/* 7. Form - Vertical Stack */
 form {
   display: flex;
   flex-direction: column;
@@ -102,32 +114,26 @@ form {
 
 input, textarea {
   width: 100%;
-  padding: 12px;
-  border-radius: 5px;
+  padding: 14px;
+  border-radius: 8px;
   border: 1px solid rgba(206, 184, 136, 0.4);
   background: rgba(150, 150, 150, 0.05);
   color: inherit;
+  font-size: 1rem;
 }
 
-/* 8. Introduction Component */
+/* 8. Text Centering for Bio */
 .intro-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  text-align: center;
   max-width: 700px;
-  margin: 0 auto;
 }
 
 .intro-title {
   font-size: 2.5rem;
-  color: #ceb888;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .intro-text {
   font-size: 1.2rem;
   line-height: 1.6;
-  text-align: center;
-  font-weight: 400;
 }
