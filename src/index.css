@@ -1,4 +1,4 @@
-/* 1. Root & Full Screen Fix */
+/* 1. Root & Full Screen */
 .app-root {
   min-height: 100vh;
   width: 100vw;
@@ -12,7 +12,7 @@
 .dark-mode { background-color: #121212 !important; color: #ceb888 !important; }
 .light-mode { background-color: #ffffff !important; color: #202124 !important; }
 
-/* 2. THE SINGLE-LINE NAV FIX */
+/* 2. Single Line Header */
 .main-header {
   width: 100%;
   border-bottom: 1px solid rgba(206, 184, 136, 0.2);

@@ -44,7 +44,7 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
-  opacity: 0; /* Hidden by default */
+  opacity: 0;
   transition: opacity 0.2s;
 }
 

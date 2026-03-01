@@ -1,4 +1,4 @@
-/* 1. Global Reset & Root */
+/* 1. Reset & Root */
 html, body {
   margin: 0;
   padding: 0;
@@ -25,7 +25,7 @@ html, body {
 .dark-mode { background-color: #121212 !important; color: #ceb888 !important; }
 .light-mode { background-color: #ffffff !important; color: #202124 !important; }
 
-/* 2. HEADER: Single Line Layout */
+/* 2. Header */
 .main-header {
   width: 100%;
   border-bottom: 1px solid rgba(206, 184, 136, 0.2);
@@ -50,7 +50,7 @@ html, body {
   color: inherit;
 }
 
-/* FIX: Clean Navigation Links */
+/* Navigation Links */
 .nav-links {
   display: flex;
   gap: 30px;
@@ -109,7 +109,7 @@ html, body {
   width: 100%;
 }
 
-/* 4. THE NOTE FORM */
+/* 4. The note form */
 .profile-form {
   display: flex;
   flex-direction: column;
@@ -160,7 +160,7 @@ html, body {
   background-color: #ceb888;
 }
 
-/* 5. HOW TO USE */
+/* 5. How to use */
 .how-to-content {
   display: flex;
   flex-direction: column;

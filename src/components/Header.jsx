@@ -1,38 +1,44 @@
 import { Link } from 'react-router-dom';
 
-function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode, toggleSidebar }) {
+function Header({ searchTerm, setSearchTerm, toggleTheme, isDarkMode }) {
   return (
-    <header className="keep-header">
-      <div className="header-left">
-        {/* The 3-line menu button that controls the Sidebar collapse */}
-        <div className="menu-btn" onClick={toggleSidebar} title="Main menu">
-          ☰
+    <header className="main-header">
+      <div className="nav-container">
+        {/* Logo and Title */}
+        <div className="header-left">
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+            <img 
+              src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" 
+              alt="Keep Logo" 
+              className="keep-logo" 
+              style={{ width: '40px', height: '40px', marginRight: '10px' }}
+            />
+            <h1 className="brand-logo-small">Keep Lite</h1>
+          </Link>
         </div>
-        <img 
-          src="https://www.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" 
-          alt="Keep Logo" 
-          className="keep-logo" 
-        />
-        <h1 className="brand-name">Keep Lite</h1>
-      </div>
 
-      <div className="header-center">
-        <div className="search-bar">
-          <span className="search-icon">🔍</span>
-          <input 
-            type="text" 
-            placeholder="Search" 
-            value={searchTerm} 
-            onChange={(e) => setSearchTerm(e.target.value)} 
-          />
+        {/* Navigation Links */}
+        <nav className="nav-links">
+          <Link to="/">Home</Link>
+          <Link to="/add">New Note</Link>
+          <Link to="/how-to">How to Use</Link>
+        </nav>
+
+        {/* Search and Theme */}
+        <div className="nav-utility">
+          <div className="search-bar">
+            <input 
+              type="text" 
+              className="nav-search-input"
+              placeholder="Search notes..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <button onClick={toggleTheme} className="theme-toggle-compact">
+            {isDarkMode ? "☀️" : "🌙"}
+          </button>
         </div>
-      </div>
-
-      <div className="header-right">
-        {/* Theme toggle button */}
-        <button onClick={toggleTheme} className="theme-toggle-btn">
-          {isDarkMode ? "☀️" : "🌙"}
-        </button>
       </div>
     </header>
   );
