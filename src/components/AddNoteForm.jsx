@@ -50,6 +50,30 @@ const AddNoteForm = ({ onAdd }) => {
             value={formData.imageUrl}
             onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
           />
+
+          {/* --- LIVE PREVIEW SECTION --- */}
+          {formData.imageUrl && (
+            <div className="image-preview" style={{ marginTop: '10px', textAlign: 'left' }}>
+              <p style={{ fontSize: '0.8rem', marginBottom: '5px', opacity: 0.8 }}>Image Preview:</p>
+              <img 
+                src={formData.imageUrl} 
+                alt="Preview" 
+                style={{ 
+                  width: '100%', 
+                  maxHeight: '200px', 
+                  objectFit: 'cover', 
+                  borderRadius: '8px',
+                  border: '1px solid #ceb888' 
+                }}
+                // This function runs if the URL is not a valid image
+                onError={(e) => {
+                  e.target.style.display = 'none'; 
+                  console.log("Invalid image URL provided.");
+                }}
+              />
+            </div>
+          )}
+          {/* ---------------------------- */}
         </div>
         
         <button type="submit" className="submit-btn">
