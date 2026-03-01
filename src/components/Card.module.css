@@ -1,19 +1,41 @@
 .card {
   position: relative;
-  display: inline-block; /* Required for Masonry */
+  display: flex; /* Changed to flex for better vertical stacking */
+  flex-direction: column;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   break-inside: avoid;
+  background: rgba(150, 150, 150, 0.1); /* Matches your dark theme */
+  border: 1px solid rgba(206, 184, 136, 0.3);
+  border-radius: 12px;
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #ceb888;
+}
+
+/* Ensure the image is a block and has a minimum presence */
+.cardImg {
+  width: calc(100% + 30px); /* Stretches to edges of padded card */
+  margin: -15px -15px 15px -15px; /* Pulls image to the top/sides */
+  height: 200px; /* Force a height so it doesn't stay 0px */
+  object-fit: cover; /* Prevents squashing */
+  border-bottom: 1px solid rgba(206, 184, 136, 0.2);
 }
 
 .pinBtn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent circle */
+  border-radius: 50%;
+  padding: 5px;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
+  z-index: 10;
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -23,7 +45,7 @@
 }
 
 .cardActions {
-  margin-top: 15px;
+  margin-top: auto; /* Pushes delete button to the bottom */
   display: flex;
   justify-content: flex-end;
   opacity: 0;
@@ -32,17 +54,4 @@
 
 .card:hover .cardActions {
   opacity: 1;
-}
-
-.deleteBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.cardImg {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 10px;
 }
