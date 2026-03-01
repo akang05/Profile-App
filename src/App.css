@@ -1,48 +1,94 @@
-/* 1. Global Reset & Root */
-html, body {
-  margin: 0;
-  padding: 0;
-  /* This ensures the base "canvas" matches your dark theme */
-  background-color: #121212; 
-  /* Prevents horizontal shifting that reveals white gaps */
-  overflow-x: hidden; 
+/* --- Keep Sections 1, 2, and 3 as they are --- */
+
+/* 4. THE NOTE FORM (Vertical Layout) */
+.form-container {
   width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.profile-form {
+  display: flex;
+  flex-direction: column; /* Forces vertical stack */
+  gap: 15px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.app-root {
-  min-height: 100vh;
-  /* Using 100% instead of 100vw prevents the "scrollbar gap" white sliver */
-  width: 100%; 
+.input-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  transition: background 0.3s ease;
-  overflow-x: hidden;
+  width: 100%;
+  gap: 12px;
 }
 
-/* Updated Dark Mode to be extra strict */
-.dark-mode { 
-  background-color: #121212 !important; 
-  color: #ceb888 !important; 
+.profile-form input, 
+.profile-form textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(206, 184, 136, 0.4);
+  background: rgba(150, 150, 150, 0.05);
+  color: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
-.light-mode { 
-  background-color: #ffffff !important; 
-  color: #202124 !important; 
+.profile-form textarea {
+  min-height: 180px; /* More space for actual notes */
+  resize: vertical;
+}
+
+.profile-form input:focus, 
+.profile-form textarea:focus {
+  border-color: #ceb888;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #f0f0f0; /* The light grey look from your reference */
+  color: #121212;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #ceb888;
+}
+
+/* 5. HOW TO USE / USER GUIDE */
+.how-to-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .how-to-step {
   padding: 20px;
-  /* Slightly darker background for the guide cards in the dark theme */
-  background: rgba(206, 184, 136, 0.07); 
-  border-left: 5px solid #ceb888;
+  background: rgba(206, 184, 136, 0.03);
+  border-left: 5px solid #ceb888; /* Stylish gold accent line */
   border-radius: 4px;
   text-align: left;
-  margin-bottom: 10px; /* Space between steps */
+}
+
+.how-to-step h3 {
+  color: #ceb888;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.how-to-step p {
+  line-height: 1.6;
+  font-size: 1rem;
+  opacity: 0.9;
 }
