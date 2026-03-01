@@ -1,50 +1,133 @@
-/* Center the form on the page */
-.form-wrapper {
+/* 1. Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Root Container - THE CENTERING ENGINE */
+.app-root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  transition: background 0.3s ease;
+}
+
+.dark-mode { background-color: #121212; color: #ceb888; }
+.light-mode { background-color: #ffffff; color: #202124; }
+
+/* 3. Header Styling */
+.main-header {
+  width: 100%;
+  max-width: 850px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.brand-logo {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+}
+
+.nav-bar {
   display: flex;
   justify-content: center;
-  width: 100%;
-  padding: 20px;
+  gap: 30px;
+  margin-bottom: 25px;
 }
 
-/* Force the form into a vertical stack */
-.profile-form {
-  display: flex;
-  flex-direction: column; /* This fixes the horizontal overlapping */
-  width: 100%;
-  max-width: 500px; /* Keeps the form from getting too wide on desktop */
-  gap: 15px; /* Adds space between each input */
-}
-
-.profile-form input, 
-.profile-form textarea {
-  width: 100%;
-  padding: 12px 15px;
-  border-radius: 4px;
-  border: 1px solid #5f6368;
-  background-color: rgba(150, 150, 150, 0.1);
+.nav-bar a {
+  text-decoration: none;
   color: inherit;
-  font-size: 1rem;
-  outline: none;
-}
-
-.profile-form input:focus, 
-.profile-form textarea:focus {
-  border-color: #ceb888; /* Highlight gold on click */
-}
-
-/* Make the button look like the one in image_043c40.png */
-.submit-btn {
-  margin-top: 10px;
-  padding: 12px;
-  background-color: #1a1a1b; /* Dark button background */
-  color: #ffffff;
-  border: 1px solid #5f6368;
-  border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
+  font-size: 1.1rem;
 }
 
-.submit-btn:hover {
-  background-color: #2d2d2e;
+.search-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ceb888;
+  background: transparent;
+  color: inherit;
+}
+
+/* 4. Content Stage - THE BOX FORMAT */
+.content-stage {
+  width: 100%;
+  max-width: 850px;
+  padding: 0 20px 50px 20px;
+}
+
+/* 5. FIXED: Merged Section Container */
+.section-container {
+  border: 2px solid #ceb888;
+  border-radius: 20px;
+  padding: 60px 40px;
+  background-color: rgba(206, 184, 136, 0.02);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 30px; /* Consistent spacing for children */
+  margin-bottom: 40px;
+}
+
+/* 6. Grid Layout for NoteCards (Added this for your MVP) */
+.note-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* 7. Form Spacing Fix */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  gap: 15px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid rgba(206, 184, 136, 0.4);
+  background: rgba(150, 150, 150, 0.05);
+  color: inherit;
+}
+
+/* 8. Introduction Component */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.intro-title {
+  font-size: 2.5rem;
+  color: #ceb888;
+  margin-bottom: 10px;
+}
+
+.intro-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  text-align: center;
+  font-weight: 400;
 }

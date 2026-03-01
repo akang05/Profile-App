@@ -1,41 +1,48 @@
-import { useCallback, lazy, Suspense } from 'react';
+import { useCallback, Suspense } from 'react'; // Removed useState and lazy since they weren't being used
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useLocalStorage } from './hooks'; 
 import { useTheme } from './context/ThemeContext'; 
 import NoteCard from './components/NoteCard';
 import Section from './components/Section';
 import Introduction from './components/Introduction';
+import AddProfileForm from './components/AddProfileForm';
 import './App.css';
 
-const AddNoteForm = lazy(() => import('./components/AddProfileForm'));
-
+// This component now USES the variables (notes, togglePin, deleteNote)
 const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
-  // CORE USER FLOW: Search for Information
   const filtered = notes.filter(n => 
     n.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     n.text.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const pinned = filtered.filter(n => n.isPinned);
-  const others = filtered.filter(n => !n.isPinned);
-
   return (
-    <div className="home-grid-layout">
-      {/* PLANNED FEATURE: Prioritize notes (Pinned Section) */}
-      {pinned.length > 0 && (
-        <Section title="PINNED">
+    <div className="home-layout">
+      {/* Visual Priority: Pinned items at the top */}
+      {notes.some(n => n.isPinned) && (
+        <Section title="Pinned">
           <div className="note-grid">
-            {pinned.map(note => (
-              <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+            {filtered.filter(n => n.isPinned).map(note => (
+              <NoteCard 
+                key={note.id} 
+                {...note} 
+                onPin={() => togglePin(note.id)} 
+                onDelete={() => deleteNote(note.id)} 
+              />
             ))}
           </div>
         </Section>
       )}
 
-      <Section title="OTHERS">
+      {/* Others Section */}
+      <Section title="Others">
         <div className="note-grid">
-          {others.map(note => (
-            <NoteCard key={note.id} {...note} onPin={() => togglePin(note.id)} onDelete={() => deleteNote(note.id)} />
+          {filtered.filter(n => !n.isPinned).map(note => (
+            <NoteCard 
+              key={note.id} 
+              {...note} 
+              onPin={() => togglePin(note.id)} 
+              onDelete={() => deleteNote(note.id)} 
+            />
           ))}
         </div>
       </Section>
@@ -46,55 +53,66 @@ const Home = ({ notes, searchTerm, togglePin, deleteNote }) => {
 function App() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [searchTerm, setSearchTerm] = useLocalStorage("keepSearch", "");
+  
+  // These variables are now passed into the Home component below
   const [notes, setNotes] = useLocalStorage("keepNotes", [
-    { id: 1, title: "Welcome", text: "I am a student at Purdue...", category: "Personal", isPinned: true }
+    { id: 1, title: "Welcome", text: "I am a student at Purdue University...", category: "Personal", isPinned: true }
   ]);
 
   const togglePin = (id) => setNotes(prev => prev.map(n => n.id === id ? { ...n, isPinned: !n.isPinned } : n));
   const deleteNote = (id) => setNotes(prev => prev.filter(n => n.id !== id));
 
   const handleAddNote = useCallback((newP) => {
-    const newNote = { id: Date.now(), title: newP.name, text: newP.bio, category: "Work", isPinned: false };
+    const newNote = { id: Date.now(), title: newP.name, text: newP.bio, category: "Personal", isPinned: false };
     setNotes(prev => [newNote, ...prev]);
   }, [setNotes]);
 
   return (
     <Router>
-      <div className={`app-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
-        <header className="keep-header">
-          <div className="brand-zone">
-            <h1 className="logo">Keep Lite</h1>
-          </div>
+      <div className={`app-root ${isDarkMode ? "dark-mode" : "light-mode"}`}>
+        <div className="desktop-container">
           
-          <nav className="main-nav">
-            <Link to="/">Home</Link>
-            <Link to="/add">Add Profile</Link>
-            <Link to="/about">About</Link>
-          </nav>
+          <header className="site-header">
+            <h1 className="logo">Keep Lite</h1>
+            <nav className="main-nav">
+              <Link to="/">Home</Link>
+              <Link to="/add">Add Profile</Link>
+              <Link to="/about">About</Link>
+            </nav>
 
-          <div className="actions">
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Search notes..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button onClick={toggleTheme} className="theme-toggle">
-              {isDarkMode ? "☀️" : "🌙"}
-            </button>
-          </div>
-        </header>
+            <div className="utility-bar">
+              <input 
+                type="text" 
+                className="search-input"
+                placeholder="Search notes..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button onClick={toggleTheme} className="theme-btn">
+                {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+              </button>
+            </div>
+          </header>
 
-        <main className="stage">
-          <Suspense fallback={<div className="loading">Loading...</div>}>
-            <Routes>
-              <Route path="/" element={<Home notes={notes} searchTerm={searchTerm} togglePin={togglePin} deleteNote={deleteNote} />} />
-              <Route path="/add" element={<Section title="Add Profile"><AddNoteForm onAdd={handleAddNote} /></Section>} />
-              <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
-            </Routes>
-          </Suspense>
-        </main>
+          <main className="page-content">
+            <Suspense fallback={<div>Loading...</div>}>
+              <Routes>
+                {/* Fixed: Variables are passed as props here */}
+                <Route path="/" element={
+                  <Home 
+                    notes={notes} 
+                    searchTerm={searchTerm} 
+                    togglePin={togglePin} 
+                    deleteNote={deleteNote} 
+                  />
+                } />
+                <Route path="/add" element={<Section title="Add Profile"><AddProfileForm onAdd={handleAddNote} /></Section>} />
+                <Route path="/about" element={<Section title="About Me"><Introduction /></Section>} />
+              </Routes>
+            </Suspense>
+          </main>
+          
+        </div>
       </div>
     </Router>
   );
