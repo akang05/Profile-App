@@ -1,77 +1,69 @@
-/* 1. THE MAIN CONTAINER: This makes Light/Dark mode cover the WHOLE screen */
+/* Global Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  transition: background-color 0.2s ease;
+  overflow: hidden;
 }
 
-.light-mode {
-  background-color: #ffffff !important;
-  color: #202124;
-}
+/* Background colors that cover the whole screen */
+.light-mode { background-color: #ffffff; color: #202124; }
+.dark-mode { background-color: #202124; color: #e8eaed; }
 
-.dark-mode {
-  background-color: #202124 !important;
-  color: #e8eaed;
-}
-
-/* 2. THE BODY WRAPPER: This holds the Sidebar and the Content side-by-side */
-.body-wrapper {
-  display: flex;
-  flex: 1; /* Takes up all space below the header */
-  overflow: hidden; /* Prevents double scrollbars */
-}
-
-/* 3. THE SIDEBAR: Fixed width so it never "pushes" pages differently */
-.keep-sidebar {
-  height: 100%;
-  background-color: inherit;
-  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border-right: 1px solid rgba(150, 150, 150, 0.2);
-}
-
-.keep-sidebar.open {
-  width: 280px;
-  min-width: 280px;
-}
-
-.keep-sidebar.collapsed {
-  width: 80px;
-  min-width: 80px;
-}
-
-/* 4. THE CONTENT AREA: This is where "About" and "Add Profile" live */
-.content-area {
-  flex: 1; /* Automatically takes the remaining width */
-  padding: 40px 60px; /* This matches the spacing in your About screenshot */
-  overflow-y: auto; /* Only the content scrolls */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Keeps titles and text left-aligned */
-}
-
-/* 5. FORM WIDTH FIX: Prevents "Add Profile" from being wider than "About" */
-.section-container {
-  width: 100%;
-  max-width: 700px; /* Limits width to match the readable text on your About page */
-  background: transparent !important; /* Fixes the "not turning white" issue */
-}
-
-.keep-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-}
-
-/* 6. HEADER FIX: Ensures it matches the theme perfectly */
+/* Header stays fixed at top */
 .keep-header {
   height: 64px;
   display: flex;
   align-items: center;
   padding: 0 16px;
   border-bottom: 1px solid rgba(150, 150, 150, 0.2);
-  background-color: inherit;
+  z-index: 100;
+}
+
+.body-wrapper {
+  display: flex;
+  flex: 1; /* Fills remaining height */
+  overflow: hidden;
+}
+
+/* SIDEBAR: Standardized width to prevent clutter */
+.keep-sidebar {
+  height: 100%;
+  transition: width 0.2s ease;
+  overflow-x: hidden;
+  border-right: 1px solid rgba(150, 150, 150, 0.1);
+}
+
+.keep-sidebar.open { width: 280px; min-width: 280px; }
+.keep-sidebar.collapsed { width: 80px; min-width: 80px; }
+
+/* CONTENT AREA: This fixes the overlap */
+.content-area {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-y: auto; /* Only this area scrolls */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding-top: 20px;
+}
+
+/* Quick Add Style */
+.quick-add-bar {
+  display: flex;
+  justify-content: space-between;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 12px 15px;
+  background: rgba(150,150,150,0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(150,150,150,0.2);
 }
