@@ -177,3 +177,35 @@ html, body {
   border-radius: 4px;
   text-align: left;
 }
+
+/* Mobile Responsive Navbar */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column; 
+    padding: 20px;         /* padding for mobile */
+    gap: 15px;
+    align-items: center;   /* Ensures logo, links, and search center perfectly */
+  }
+
+  .nav-links {
+    gap: 20px; 
+    margin: 5px 0;
+    width: 100%;
+    justify-content: center; /* Centers Home, New Note, etc. */
+  }
+
+  .nav-utility {
+    width: 100%;
+    justify-content: center; 
+    gap: 12px;
+  }
+
+  .nav-search-input {
+    width: 90%;        
+    max-width: 300px;  
+  }
+
+  .note-grid {
+    grid-template-columns: 1fr; 
+  }
+}
